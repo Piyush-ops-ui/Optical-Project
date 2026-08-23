@@ -261,13 +261,22 @@ export default function ScrollCanvasEngine({
 
     const container = containerRef.current;
 
+    // Ensure ScrollTrigger ignores mobile address-bar resize jitters
+    ScrollTrigger.config({ ignoreMobileResize: true });
+
+    const isMobileViewport = window.innerWidth <= 768;
+    // Optimal scroll distance for natural touch swipes on mobile (3200px) vs desktop (4000px)
+    const scrollDistance = isMobileViewport ? '+=3200' : '+=4000';
+
     const trigger = ScrollTrigger.create({
       trigger: container,
       start: 'top top',
-      end: '+=4000',
+      end: scrollDistance,
       pin: true,
+      pinSpacing: true,
       anticipatePin: 1,
       scrub: 0.2, // Snappy 60fps tracking
+      invalidateOnRefresh: true,
       onUpdate: (self) => {
         const p = self.progress;
         const targetIndex = Math.min(totalFrames - 1, Math.max(0, Math.floor(p * totalFrames)));
@@ -275,8 +284,12 @@ export default function ScrollCanvasEngine({
       },
     });
 
-    // Resize Handler: Redraws the last successfully rendered image cleanly without blank flash
+    // Refresh ScrollTrigger to calculate accurate pinned boundaries
+    ScrollTrigger.refresh();
+
+    // Resize Handler: Redraws the last successfully rendered image cleanly and refreshes trigger
     const handleResize = () => {
+      ScrollTrigger.refresh();
       if (lastSuccessfullyDrawnImgRef.current && isImageReady(lastSuccessfullyDrawnImgRef.current)) {
         drawImageToCanvas(lastSuccessfullyDrawnImgRef.current, renderedFrameIndexRef.current);
       }

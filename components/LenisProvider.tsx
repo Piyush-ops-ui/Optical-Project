@@ -21,21 +21,22 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
     let updateTicker: ((time: number) => void) | null = null;
 
     try {
+      ScrollTrigger.config({ ignoreMobileResize: true });
+
       lenis = new Lenis({
         duration: 1.0,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         orientation: 'vertical',
         smoothWheel: true,
-        wheelMultiplier: 0.95,
-        touchMultiplier: 1.5,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.0,
+        syncTouch: false,
         infinite: false,
       });
 
       lenisRef.current = lenis;
 
-      lenis.on('scroll', () => {
-        ScrollTrigger.update();
-      });
+      lenis.on('scroll', ScrollTrigger.update);
 
       updateTicker = (time: number) => {
         lenis?.raf(time * 1000);
