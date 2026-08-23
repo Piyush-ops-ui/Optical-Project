@@ -81,16 +81,33 @@ export default function ScrollCanvasEngine({
     let offsetX = 0;
     let offsetY = 0;
 
-    // Aspect-ratio cover geometry
-    if (canvasAspect > imgAspect) {
-      drawWidth = canvasWidth;
-      drawHeight = canvasWidth / imgAspect;
-      offsetY = (canvasHeight - drawHeight) / 2;
-    } else {
-      drawWidth = canvasHeight * imgAspect;
-      drawHeight = canvasHeight;
+    // Detect mobile portrait viewport (< 768px or portrait aspect ratio)
+    const isMobile = rect.width <= 768 || canvasAspect < 1.05;
+
+    if (isMobile) {
+      // Mobile: Intelligently fit full subject width (no cropping of sunglasses)
+      drawWidth = canvasWidth * 0.98;
+      drawHeight = drawWidth / imgAspect;
       offsetX = (canvasWidth - drawWidth) / 2;
+      
+      // Position in the upper-middle visual focal zone (centered around ~39% viewport height)
+      offsetY = (canvasHeight * 0.39) - (drawHeight / 2);
+    } else {
+      // Desktop / Landscape: Cover math
+      if (canvasAspect > imgAspect) {
+        drawWidth = canvasWidth;
+        drawHeight = canvasWidth / imgAspect;
+        offsetY = (canvasHeight - drawHeight) / 2;
+      } else {
+        drawWidth = canvasHeight * imgAspect;
+        drawHeight = canvasHeight;
+        offsetX = (canvasWidth - drawWidth) / 2;
+      }
     }
+
+    // Fill background with seamless obsidian dark
+    ctx.fillStyle = '#050507';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
     // Draw directly over the canvas without clearing first (no blank flicker)
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);

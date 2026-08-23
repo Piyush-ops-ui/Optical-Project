@@ -122,134 +122,179 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
       >
         
         {/* =========================================================================
-            PHASE 1: HERO OVERLAY (Guaranteed 100% visible on all screen sizes)
+            PHASE 1: HERO OVERLAY (Dedicated mobile top/bottom split + desktop card)
            ========================================================================= */}
         <div
           ref={phase1Ref}
-          className="hero-overlay-card"
+          className="hero-overlay-wrapper"
           style={{
             position: 'absolute',
+            inset: 0,
             opacity: 1,
             transform: 'translate3d(0, 0, 0)',
             pointerEvents: 'auto',
             transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
             willChange: 'opacity, transform',
+            display: 'flex',
           }}
         >
-          {/* Tag / Category Badge */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.45rem',
-              padding: '0.3rem 0.8rem',
-              borderRadius: '9999px',
-              background: 'rgba(10, 12, 18, 0.8)',
-              border: '1px solid rgba(212, 175, 55, 0.4)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              marginBottom: '0.75rem',
-              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.5)',
-            }}
-          >
-            <Sparkles size={11} color="#d4af37" />
-            <span
+          {/* Mobile Top Brand Header (Visible only on mobile <= 768px) */}
+          <div className="mobile-hero-top">
+            <div
               style={{
-                fontSize: '0.65rem',
-                letterSpacing: '0.2em',
-                color: '#f3e5ab',
-                textTransform: 'uppercase',
-                fontWeight: 600,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '9999px',
+                background: 'rgba(10, 12, 18, 0.85)',
+                border: '1px solid rgba(212, 175, 55, 0.4)',
+                backdropFilter: 'blur(12px)',
+                marginBottom: '0.4rem',
               }}
             >
-              Haute Eyewear Atelier
-            </span>
+              <Sparkles size={10} color="#d4af37" />
+              <span
+                style={{
+                  fontSize: '0.6rem',
+                  letterSpacing: '0.2em',
+                  color: '#f3e5ab',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                }}
+              >
+                Haute Eyewear Atelier
+              </span>
+            </div>
+
+            <h1
+              style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: 'clamp(1.6rem, 5.5vw, 2.25rem)',
+                lineHeight: 1.1,
+                letterSpacing: '0.18em',
+                fontWeight: 800,
+                color: '#ffffff',
+                textTransform: 'uppercase',
+                margin: 0,
+              }}
+            >
+              TIWARI OPTICAL
+            </h1>
           </div>
 
-          {/* Brand Name */}
-          <h1
-            style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.85rem, 3.8vw, 3.25rem)',
-              lineHeight: 1.12,
-              letterSpacing: 'clamp(0.12em, 0.2vw, 0.2em)',
-              fontWeight: 800,
-              color: '#ffffff',
-              marginBottom: '0.5rem',
-              textTransform: 'uppercase',
-            }}
-          >
-            TIWARI <br className="hero-break" />
-            <span className="text-gradient-silver">OPTICAL</span>
-          </h1>
+          {/* Desktop Card & Mobile Lower Controls */}
+          <div className="hero-overlay-card">
+            {/* Desktop-only badge and title */}
+            <div className="desktop-hero-header">
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  padding: '0.3rem 0.8rem',
+                  borderRadius: '9999px',
+                  background: 'rgba(10, 12, 18, 0.8)',
+                  border: '1px solid rgba(212, 175, 55, 0.4)',
+                  backdropFilter: 'blur(12px)',
+                  marginBottom: '0.75rem',
+                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.5)',
+                }}
+              >
+                <Sparkles size={11} color="#d4af37" />
+                <span
+                  style={{
+                    fontSize: '0.65rem',
+                    letterSpacing: '0.2em',
+                    color: '#f3e5ab',
+                    textTransform: 'uppercase',
+                    fontWeight: 600,
+                  }}
+                >
+                  Haute Eyewear Atelier
+                </span>
+              </div>
 
-          {/* Tagline */}
-          <p
-            style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(0.85rem, 1.5vw, 1.15rem)',
-              letterSpacing: 'clamp(0.12em, 0.2vw, 0.22em)',
-              color: '#ffffff',
-              textTransform: 'uppercase',
-              marginBottom: '0.65rem',
-              fontWeight: 600,
-              textShadow: '0 2px 8px rgba(0,0,0,0.8)',
-            }}
-          >
-            SEE THE WORLD DIFFERENTLY.
-          </p>
+              <h1
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(1.85rem, 3.8vw, 3.25rem)',
+                  lineHeight: 1.12,
+                  letterSpacing: 'clamp(0.12em, 0.2vw, 0.2em)',
+                  fontWeight: 800,
+                  color: '#ffffff',
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                }}
+              >
+                TIWARI <br />
+                <span className="text-gradient-silver">OPTICAL</span>
+              </h1>
+            </div>
 
-          {/* Brand Description */}
-          <p
-            style={{
-              fontSize: 'clamp(0.8rem, 1vw, 0.9rem)',
-              lineHeight: 1.6,
-              color: '#c4c8d8',
-              maxWidth: '460px',
-              marginBottom: '1.25rem',
-              fontWeight: 400,
-              textShadow: '0 1px 6px rgba(0,0,0,0.9)',
-            }}
-          >
-            Discover premium sunglasses curated for distinctive style, everyday comfort, and timeless design.
-          </p>
-
-          {/* Call To Action Buttons */}
-          <div
-            style={{
-              display: 'flex',
-              gap: '0.75rem',
-              flexWrap: 'wrap',
-            }}
-            className="hero-cta-group"
-          >
-            <button
-              onClick={scrollToCollection}
-              className="btn-primary hero-btn"
+            {/* Tagline */}
+            <p
               style={{
-                padding: '0.7rem 1.5rem',
-                fontSize: '0.72rem',
-                letterSpacing: '0.15em',
+                fontFamily: 'var(--font-serif)',
+                fontSize: 'clamp(0.85rem, 1.5vw, 1.15rem)',
+                letterSpacing: 'clamp(0.12em, 0.2vw, 0.22em)',
+                color: '#ffffff',
+                textTransform: 'uppercase',
+                marginBottom: '0.5rem',
+                fontWeight: 600,
+                textShadow: '0 2px 8px rgba(0,0,0,0.8)',
               }}
+              className="hero-tagline"
             >
-              <span>EXPLORE COLLECTION</span>
-              <ArrowRight size={13} />
-            </button>
-            <a
-              href="#about"
-              className="btn-secondary hero-btn"
+              SEE THE WORLD DIFFERENTLY.
+            </p>
+
+            {/* Brand Description */}
+            <p
               style={{
-                padding: '0.65rem 1.35rem',
-                fontSize: '0.72rem',
-                letterSpacing: '0.15em',
+                fontSize: 'clamp(0.78rem, 1vw, 0.88rem)',
+                lineHeight: 1.55,
+                color: '#c4c8d8',
+                maxWidth: '460px',
+                marginBottom: '1rem',
+                fontWeight: 400,
+                textShadow: '0 1px 6px rgba(0,0,0,0.9)',
               }}
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-              }}
+              className="hero-description"
             >
-              <span>DISCOVER CRAFT</span>
-            </a>
+              Discover premium sunglasses curated for distinctive style, everyday comfort, and timeless design.
+            </p>
+
+            {/* Call To Action Buttons */}
+            <div className="hero-cta-group">
+              <button
+                onClick={scrollToCollection}
+                className="btn-primary hero-btn"
+                style={{
+                  padding: '0.7rem 1.4rem',
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.15em',
+                }}
+              >
+                <span>EXPLORE COLLECTION</span>
+                <ArrowRight size={13} />
+              </button>
+              <a
+                href="#about"
+                className="btn-secondary hero-btn"
+                style={{
+                  padding: '0.65rem 1.25rem',
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.15em',
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <span>DISCOVER CRAFT</span>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -279,7 +324,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
               background: 'rgba(10, 12, 18, 0.8)',
               border: '1px solid rgba(163, 184, 204, 0.3)',
               backdropFilter: 'blur(12px)',
-              marginBottom: '0.75rem',
+              marginBottom: '0.65rem',
             }}
           >
             <Eye size={12} color="#a3b8cc" />
@@ -299,23 +344,23 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.75rem, 3.5vw, 2.85rem)',
+              fontSize: 'clamp(1.5rem, 3.5vw, 2.85rem)',
               lineHeight: 1.15,
               letterSpacing: '0.15em',
               fontWeight: 800,
               color: '#ffffff',
-              marginBottom: '0.65rem',
+              marginBottom: '0.5rem',
               textTransform: 'uppercase',
             }}
           >
-            THROUGH <br />
+            THROUGH <br className="desktop-break" />
             <span className="text-gradient-silver">THE LENS</span>
           </h2>
 
           <p
             style={{
-              fontSize: 'clamp(0.8rem, 1vw, 0.88rem)',
-              lineHeight: 1.7,
+              fontSize: 'clamp(0.78rem, 1vw, 0.88rem)',
+              lineHeight: 1.65,
               color: '#b0b5c6',
               fontWeight: 400,
             }}
@@ -350,7 +395,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
               background: 'rgba(10, 12, 18, 0.8)',
               border: '1px solid rgba(255, 255, 255, 0.2)',
               backdropFilter: 'blur(12px)',
-              marginBottom: '0.75rem',
+              marginBottom: '0.65rem',
             }}
           >
             <Shield size={12} color="#ffffff" />
@@ -370,23 +415,23 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.75rem, 3.5vw, 2.85rem)',
+              fontSize: 'clamp(1.5rem, 3.5vw, 2.85rem)',
               lineHeight: 1.15,
               letterSpacing: '0.16em',
               fontWeight: 800,
               color: '#ffffff',
-              marginBottom: '0.65rem',
+              marginBottom: '0.5rem',
               textTransform: 'uppercase',
             }}
           >
-            ARCHITECTURAL <br />
+            ARCHITECTURAL <br className="desktop-break" />
             <span className="text-gradient-silver">SANCTUARY</span>
           </h2>
 
           <p
             style={{
-              fontSize: 'clamp(0.8rem, 1vw, 0.88rem)',
-              lineHeight: 1.7,
+              fontSize: 'clamp(0.78rem, 1vw, 0.88rem)',
+              lineHeight: 1.65,
               color: '#b0b5c6',
               maxWidth: '480px',
               margin: '0 auto',
@@ -423,7 +468,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
               background: 'rgba(10, 12, 18, 0.8)',
               border: '1px solid rgba(212, 175, 55, 0.35)',
               backdropFilter: 'blur(12px)',
-              marginBottom: '0.75rem',
+              marginBottom: '0.65rem',
             }}
           >
             <Compass size={12} color="#d4af37" />
@@ -443,16 +488,16 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.75rem, 3.5vw, 3rem)',
+              fontSize: 'clamp(1.5rem, 3.5vw, 3rem)',
               lineHeight: 1.15,
               letterSpacing: '0.15em',
               fontWeight: 800,
               color: '#ffffff',
-              marginBottom: '0.5rem',
+              marginBottom: '0.4rem',
               textTransform: 'uppercase',
             }}
           >
-            THE <br />
+            THE <br className="desktop-break" />
             <span className="text-gradient-silver">COLLECTION</span>
           </h2>
 
@@ -462,7 +507,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
               fontSize: 'clamp(0.85rem, 1.3vw, 1.05rem)',
               letterSpacing: '0.12em',
               color: '#e2e4ea',
-              marginBottom: '0.65rem',
+              marginBottom: '0.5rem',
               fontWeight: 500,
             }}
           >
@@ -472,10 +517,10 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           <p
             style={{
               fontSize: 'clamp(0.78rem, 0.95vw, 0.85rem)',
-              lineHeight: 1.65,
+              lineHeight: 1.6,
               color: '#9ea3b5',
               maxWidth: '420px',
-              marginBottom: '1.25rem',
+              marginBottom: '1rem',
             }}
           >
             Explore our curated selection of 20 signature sunglasses engineered for everyday confidence and distinguished luxury.
@@ -485,7 +530,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
             onClick={scrollToCollection}
             className="btn-primary hero-btn"
             style={{
-              padding: '0.7rem 1.5rem',
+              padding: '0.65rem 1.35rem',
               fontSize: '0.72rem',
               letterSpacing: '0.15em',
             }}
@@ -518,7 +563,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
               color: '#9ea3b5',
               textTransform: 'uppercase',
               display: 'block',
-              marginBottom: '0.5rem',
+              marginBottom: '0.4rem',
               fontWeight: 500,
             }}
           >
@@ -528,12 +573,12 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.75rem, 3.8vw, 3.25rem)',
+              fontSize: 'clamp(1.6rem, 3.8vw, 3.25rem)',
               lineHeight: 1.12,
               letterSpacing: '0.18em',
               fontWeight: 800,
               color: '#ffffff',
-              marginBottom: '0.5rem',
+              marginBottom: '0.4rem',
               textTransform: 'uppercase',
             }}
           >
@@ -547,7 +592,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
               letterSpacing: '0.22em',
               color: '#f3e5ab',
               textTransform: 'uppercase',
-              marginBottom: '1.25rem',
+              marginBottom: '1rem',
               fontWeight: 600,
             }}
           >
@@ -558,7 +603,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
             onClick={scrollToCollection}
             className="btn-primary hero-btn"
             style={{
-              padding: '0.75rem 1.75rem',
+              padding: '0.7rem 1.6rem',
               fontSize: '0.75rem',
               letterSpacing: '0.16em',
             }}
@@ -571,10 +616,25 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
       </div>
 
       <style jsx>{`
-        /* Desktop Default (min-width: 900px) */
+        /* =========================================================================
+           DESKTOP COMPOSITION (min-width: 769px)
+           ========================================================================= */
+        .mobile-hero-top {
+          display: none;
+        }
+
+        .desktop-hero-header {
+          display: block;
+        }
+
+        .hero-overlay-wrapper {
+          align-items: center;
+        }
+
         .hero-overlay-card {
           max-width: 480px;
           text-align: left;
+          position: absolute;
           left: clamp(2rem, 5vw, 4.5rem);
           top: 50%;
           transform: translate3d(0, -50%, 0);
@@ -616,8 +676,14 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           border-radius: 24px;
         }
 
+        .hero-cta-group {
+          display: flex;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+        }
+
         /* Small Desktop / Laptop Screen Heights (max-height: 740px) */
-        @media (min-width: 900px) and (max-height: 740px) {
+        @media (min-width: 769px) and (max-height: 740px) {
           .hero-overlay-card,
           .phase-left,
           .phase-right,
@@ -626,8 +692,37 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           }
         }
 
-        /* Mobile & Tablet Specific Layout (max-width: 899px) */
-        @media (max-width: 899px) {
+        /* =========================================================================
+           MOBILE COMPOSITION (max-width: 768px)
+           - Dedicated Top Header
+           - 100% Unobstructed Central 3D Sunglasses Stage
+           - Lower Controls Safe Area
+           ========================================================================= */
+        @media (max-width: 768px) {
+          .desktop-hero-header {
+            display: none !important;
+          }
+
+          .desktop-break {
+            display: none !important;
+          }
+
+          /* Mobile Top Brand Header */
+          .mobile-hero-top {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            top: max(80px, 10vh);
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 15;
+            padding: 0 1rem;
+            pointer-events: none;
+          }
+
+          /* Mobile Bottom Card (Below Sunglasses Stage) */
           .hero-overlay-card,
           .phase-left,
           .phase-right,
@@ -635,26 +730,35 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
             position: absolute !important;
             left: 1rem !important;
             right: 1rem !important;
-            bottom: 1.25rem !important;
+            bottom: max(1.25rem, 3vh) !important;
             top: auto !important;
             max-width: 100% !important;
             transform: none !important;
             text-align: center !important;
-            padding: 1.25rem 1rem !important;
+            padding: 1.15rem 1rem !important;
             background: linear-gradient(to top, rgba(5, 5, 7, 0.98) 0%, rgba(5, 5, 7, 0.88) 75%, rgba(5, 5, 7, 0.6) 100%) !important;
             border-radius: 18px !important;
             backdrop-filter: blur(16px) !important;
             -webkit-backdrop-filter: blur(16px) !important;
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7) !important;
-          }
-
-          .hero-break {
-            display: none;
+            z-index: 15;
           }
 
           .hero-cta-group {
+            display: flex !important;
+            flex-direction: row !important;
             justify-content: center !important;
+            gap: 0.5rem !important;
+            width: 100% !important;
+          }
+
+          .hero-btn {
+            flex: 1 !important;
+            padding: 0.65rem 0.75rem !important;
+            font-size: 0.68rem !important;
+            letter-spacing: 0.12em !important;
+            white-space: nowrap !important;
           }
 
           .hero-overlay-card p,
@@ -666,26 +770,13 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           }
         }
 
-        /* Mobile screens (< 480px) */
-        @media (max-width: 480px) {
-          .hero-overlay-card,
-          .phase-left,
-          .phase-right,
-          .phase-center {
-            bottom: 0.75rem !important;
-            padding: 1.1rem 0.9rem !important;
-          }
-
+        /* Ultra-compact mobile screens (< 380px) */
+        @media (max-width: 380px) {
           .hero-cta-group {
             flex-direction: column !important;
-            gap: 0.5rem !important;
-            width: 100% !important;
           }
-
           .hero-btn {
             width: 100% !important;
-            box-sizing: border-box !important;
-            padding: 0.65rem 1rem !important;
           }
         }
       `}</style>
