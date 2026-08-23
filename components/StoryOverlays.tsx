@@ -1,0 +1,698 @@
+'use client';
+
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import { ArrowRight, Sparkles, Shield, Eye, Compass } from 'lucide-react';
+
+export interface StoryOverlaysHandle {
+  updateProgress: (progress: number) => void;
+}
+
+const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
+  const phase1Ref = useRef<HTMLDivElement>(null);
+  const phase2Ref = useRef<HTMLDivElement>(null);
+  const phase3Ref = useRef<HTMLDivElement>(null);
+  const phase4Ref = useRef<HTMLDivElement>(null);
+  const phase5Ref = useRef<HTMLDivElement>(null);
+
+  // Compute transform and opacity smoothly
+  const getPhaseStyles = (progress: number, start: number, peakIn: number, peakOut: number, end: number) => {
+    if (progress < start || progress > end) {
+      return { opacity: '0', transform: 'translate3d(0, 16px, 0)', pointerEvents: 'none' };
+    }
+    let opacity = 0;
+    let translateY = 0;
+
+    if (progress >= start && progress < peakIn) {
+      const t = (progress - start) / (peakIn - start);
+      opacity = t;
+      translateY = (1 - t) * 16;
+    } else if (progress >= peakIn && progress <= peakOut) {
+      opacity = 1;
+      translateY = 0;
+    } else if (progress > peakOut && progress <= end) {
+      const t = (progress - peakOut) / (end - peakOut);
+      opacity = 1 - t;
+      translateY = -t * 16;
+    }
+
+    return {
+      opacity: opacity.toFixed(3),
+      transform: `translate3d(0, ${translateY.toFixed(1)}px, 0)`,
+      pointerEvents: opacity > 0.3 ? 'auto' : 'none',
+    };
+  };
+
+  useImperativeHandle(ref, () => ({
+    updateProgress: (progress: number) => {
+      // Phase 1: Hero (Progress 0 to 0.20)
+      if (phase1Ref.current) {
+        const s = getPhaseStyles(progress, -0.05, 0.0, 0.13, 0.21);
+        phase1Ref.current.style.opacity = s.opacity;
+        phase1Ref.current.style.transform = s.transform;
+        phase1Ref.current.style.pointerEvents = s.pointerEvents;
+      }
+
+      // Phase 2: Through The Lens (Progress 0.23 to 0.45)
+      if (phase2Ref.current) {
+        const s = getPhaseStyles(progress, 0.23, 0.29, 0.38, 0.45);
+        phase2Ref.current.style.opacity = s.opacity;
+        phase2Ref.current.style.transform = s.transform;
+        phase2Ref.current.style.pointerEvents = s.pointerEvents;
+      }
+
+      // Phase 3: Architectural Showroom (Progress 0.48 to 0.69)
+      if (phase3Ref.current) {
+        const s = getPhaseStyles(progress, 0.48, 0.54, 0.62, 0.69);
+        phase3Ref.current.style.opacity = s.opacity;
+        phase3Ref.current.style.transform = s.transform;
+        phase3Ref.current.style.pointerEvents = s.pointerEvents;
+      }
+
+      // Phase 4: The Collection Emergence (Progress 0.71 to 0.86)
+      if (phase4Ref.current) {
+        const s = getPhaseStyles(progress, 0.71, 0.76, 0.82, 0.87);
+        phase4Ref.current.style.opacity = s.opacity;
+        phase4Ref.current.style.transform = s.transform;
+        phase4Ref.current.style.pointerEvents = s.pointerEvents;
+      }
+
+      // Phase 5: Final Brand Climax (Progress 0.88 to 1.0)
+      if (phase5Ref.current) {
+        const s = getPhaseStyles(progress, 0.88, 0.93, 1.0, 1.05);
+        phase5Ref.current.style.opacity = s.opacity;
+        phase5Ref.current.style.transform = s.transform;
+        phase5Ref.current.style.pointerEvents = s.pointerEvents;
+      }
+    },
+  }));
+
+  const scrollToCollection = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const collectionEl = document.getElementById('collection');
+    if (collectionEl) {
+      collectionEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <div
+      className="story-overlays-root"
+      style={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 10,
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+      }}
+    >
+      <div
+        className="luxury-container"
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        
+        {/* =========================================================================
+            PHASE 1: HERO OVERLAY (Guaranteed 100% visible on all screen sizes)
+           ========================================================================= */}
+        <div
+          ref={phase1Ref}
+          className="hero-overlay-card"
+          style={{
+            position: 'absolute',
+            opacity: 1,
+            transform: 'translate3d(0, 0, 0)',
+            pointerEvents: 'auto',
+            transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
+            willChange: 'opacity, transform',
+          }}
+        >
+          {/* Tag / Category Badge */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.45rem',
+              padding: '0.3rem 0.8rem',
+              borderRadius: '9999px',
+              background: 'rgba(10, 12, 18, 0.8)',
+              border: '1px solid rgba(212, 175, 55, 0.4)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              marginBottom: '0.75rem',
+              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.5)',
+            }}
+          >
+            <Sparkles size={11} color="#d4af37" />
+            <span
+              style={{
+                fontSize: '0.65rem',
+                letterSpacing: '0.2em',
+                color: '#f3e5ab',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+              }}
+            >
+              Haute Eyewear Atelier
+            </span>
+          </div>
+
+          {/* Brand Name */}
+          <h1
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(1.85rem, 3.8vw, 3.25rem)',
+              lineHeight: 1.12,
+              letterSpacing: 'clamp(0.12em, 0.2vw, 0.2em)',
+              fontWeight: 800,
+              color: '#ffffff',
+              marginBottom: '0.5rem',
+              textTransform: 'uppercase',
+            }}
+          >
+            TIWARI <br className="hero-break" />
+            <span className="text-gradient-silver">OPTICAL</span>
+          </h1>
+
+          {/* Tagline */}
+          <p
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(0.85rem, 1.5vw, 1.15rem)',
+              letterSpacing: 'clamp(0.12em, 0.2vw, 0.22em)',
+              color: '#ffffff',
+              textTransform: 'uppercase',
+              marginBottom: '0.65rem',
+              fontWeight: 600,
+              textShadow: '0 2px 8px rgba(0,0,0,0.8)',
+            }}
+          >
+            SEE THE WORLD DIFFERENTLY.
+          </p>
+
+          {/* Brand Description */}
+          <p
+            style={{
+              fontSize: 'clamp(0.8rem, 1vw, 0.9rem)',
+              lineHeight: 1.6,
+              color: '#c4c8d8',
+              maxWidth: '460px',
+              marginBottom: '1.25rem',
+              fontWeight: 400,
+              textShadow: '0 1px 6px rgba(0,0,0,0.9)',
+            }}
+          >
+            Discover premium sunglasses curated for distinctive style, everyday comfort, and timeless design.
+          </p>
+
+          {/* Call To Action Buttons */}
+          <div
+            style={{
+              display: 'flex',
+              gap: '0.75rem',
+              flexWrap: 'wrap',
+            }}
+            className="hero-cta-group"
+          >
+            <button
+              onClick={scrollToCollection}
+              className="btn-primary hero-btn"
+              style={{
+                padding: '0.7rem 1.5rem',
+                fontSize: '0.72rem',
+                letterSpacing: '0.15em',
+              }}
+            >
+              <span>EXPLORE COLLECTION</span>
+              <ArrowRight size={13} />
+            </button>
+            <a
+              href="#about"
+              className="btn-secondary hero-btn"
+              style={{
+                padding: '0.65rem 1.35rem',
+                fontSize: '0.72rem',
+                letterSpacing: '0.15em',
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              <span>DISCOVER CRAFT</span>
+            </a>
+          </div>
+        </div>
+
+
+        {/* =========================================================================
+            PHASE 2: THROUGH THE LENS
+           ========================================================================= */}
+        <div
+          ref={phase2Ref}
+          className="story-phase-card phase-right"
+          style={{
+            position: 'absolute',
+            opacity: 0,
+            transform: 'translate3d(0, 16px, 0)',
+            pointerEvents: 'none',
+            transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
+            willChange: 'opacity, transform',
+          }}
+        >
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.45rem',
+              padding: '0.3rem 0.8rem',
+              borderRadius: '9999px',
+              background: 'rgba(10, 12, 18, 0.8)',
+              border: '1px solid rgba(163, 184, 204, 0.3)',
+              backdropFilter: 'blur(12px)',
+              marginBottom: '0.75rem',
+            }}
+          >
+            <Eye size={12} color="#a3b8cc" />
+            <span
+              style={{
+                fontSize: '0.65rem',
+                letterSpacing: '0.2em',
+                color: '#a3b8cc',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+              }}
+            >
+              Precision Optics
+            </span>
+          </div>
+
+          <h2
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(1.75rem, 3.5vw, 2.85rem)',
+              lineHeight: 1.15,
+              letterSpacing: '0.15em',
+              fontWeight: 800,
+              color: '#ffffff',
+              marginBottom: '0.65rem',
+              textTransform: 'uppercase',
+            }}
+          >
+            THROUGH <br />
+            <span className="text-gradient-silver">THE LENS</span>
+          </h2>
+
+          <p
+            style={{
+              fontSize: 'clamp(0.8rem, 1vw, 0.88rem)',
+              lineHeight: 1.7,
+              color: '#b0b5c6',
+              fontWeight: 400,
+            }}
+          >
+            Engineered with crystalline clarity and high-definition polarized optics. Anti-reflective coatings eliminate glare while revealing rich natural contrast.
+          </p>
+        </div>
+
+
+        {/* =========================================================================
+            PHASE 3: ARCHITECTURAL SHOWROOM / 3D EMBLEM
+           ========================================================================= */}
+        <div
+          ref={phase3Ref}
+          className="story-phase-card phase-center"
+          style={{
+            position: 'absolute',
+            opacity: 0,
+            transform: 'translate3d(0, 16px, 0)',
+            pointerEvents: 'none',
+            transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
+            willChange: 'opacity, transform',
+          }}
+        >
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.45rem',
+              padding: '0.3rem 0.8rem',
+              borderRadius: '9999px',
+              background: 'rgba(10, 12, 18, 0.8)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(12px)',
+              marginBottom: '0.75rem',
+            }}
+          >
+            <Shield size={12} color="#ffffff" />
+            <span
+              style={{
+                fontSize: '0.65rem',
+                letterSpacing: '0.2em',
+                color: '#ffffff',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+              }}
+            >
+              An Eyewear Sanctuary
+            </span>
+          </div>
+
+          <h2
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(1.75rem, 3.5vw, 2.85rem)',
+              lineHeight: 1.15,
+              letterSpacing: '0.16em',
+              fontWeight: 800,
+              color: '#ffffff',
+              marginBottom: '0.65rem',
+              textTransform: 'uppercase',
+            }}
+          >
+            ARCHITECTURAL <br />
+            <span className="text-gradient-silver">SANCTUARY</span>
+          </h2>
+
+          <p
+            style={{
+              fontSize: 'clamp(0.8rem, 1vw, 0.88rem)',
+              lineHeight: 1.7,
+              color: '#b0b5c6',
+              maxWidth: '480px',
+              margin: '0 auto',
+              fontWeight: 400,
+            }}
+          >
+            Where Italian bio-acetate meets aerospace-grade Japanese titanium in a masterclass of structural elegance and weightless comfort.
+          </p>
+        </div>
+
+
+        {/* =========================================================================
+            PHASE 4: THE COLLECTION EMERGENCE
+           ========================================================================= */}
+        <div
+          ref={phase4Ref}
+          className="story-phase-card phase-left"
+          style={{
+            position: 'absolute',
+            opacity: 0,
+            transform: 'translate3d(0, 16px, 0)',
+            pointerEvents: 'none',
+            transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
+            willChange: 'opacity, transform',
+          }}
+        >
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.45rem',
+              padding: '0.3rem 0.8rem',
+              borderRadius: '9999px',
+              background: 'rgba(10, 12, 18, 0.8)',
+              border: '1px solid rgba(212, 175, 55, 0.35)',
+              backdropFilter: 'blur(12px)',
+              marginBottom: '0.75rem',
+            }}
+          >
+            <Compass size={12} color="#d4af37" />
+            <span
+              style={{
+                fontSize: '0.65rem',
+                letterSpacing: '0.2em',
+                color: '#f3e5ab',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+              }}
+            >
+              Curated Eyewear
+            </span>
+          </div>
+
+          <h2
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(1.75rem, 3.5vw, 3rem)',
+              lineHeight: 1.15,
+              letterSpacing: '0.15em',
+              fontWeight: 800,
+              color: '#ffffff',
+              marginBottom: '0.5rem',
+              textTransform: 'uppercase',
+            }}
+          >
+            THE <br />
+            <span className="text-gradient-silver">COLLECTION</span>
+          </h2>
+
+          <p
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(0.85rem, 1.3vw, 1.05rem)',
+              letterSpacing: '0.12em',
+              color: '#e2e4ea',
+              marginBottom: '0.65rem',
+              fontWeight: 500,
+            }}
+          >
+            Find the frame that defines you.
+          </p>
+
+          <p
+            style={{
+              fontSize: 'clamp(0.78rem, 0.95vw, 0.85rem)',
+              lineHeight: 1.65,
+              color: '#9ea3b5',
+              maxWidth: '420px',
+              marginBottom: '1.25rem',
+            }}
+          >
+            Explore our curated selection of 20 signature sunglasses engineered for everyday confidence and distinguished luxury.
+          </p>
+
+          <button
+            onClick={scrollToCollection}
+            className="btn-primary hero-btn"
+            style={{
+              padding: '0.7rem 1.5rem',
+              fontSize: '0.72rem',
+              letterSpacing: '0.15em',
+            }}
+          >
+            <span>EXPLORE COLLECTION</span>
+            <ArrowRight size={13} />
+          </button>
+        </div>
+
+
+        {/* =========================================================================
+            PHASE 5: HERO PRODUCT & SEAMLESS TRANSITION
+           ========================================================================= */}
+        <div
+          ref={phase5Ref}
+          className="story-phase-card phase-center"
+          style={{
+            position: 'absolute',
+            opacity: 0,
+            transform: 'translate3d(0, 16px, 0)',
+            pointerEvents: 'none',
+            transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
+            willChange: 'opacity, transform',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '0.65rem',
+              letterSpacing: '0.28em',
+              color: '#9ea3b5',
+              textTransform: 'uppercase',
+              display: 'block',
+              marginBottom: '0.5rem',
+              fontWeight: 500,
+            }}
+          >
+            Tiwari Signature Silhouette
+          </span>
+
+          <h2
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(1.75rem, 3.8vw, 3.25rem)',
+              lineHeight: 1.12,
+              letterSpacing: '0.18em',
+              fontWeight: 800,
+              color: '#ffffff',
+              marginBottom: '0.5rem',
+              textTransform: 'uppercase',
+            }}
+          >
+            TIWARI OPTICAL
+          </h2>
+
+          <p
+            style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'clamp(0.85rem, 1.4vw, 1.1rem)',
+              letterSpacing: '0.22em',
+              color: '#f3e5ab',
+              textTransform: 'uppercase',
+              marginBottom: '1.25rem',
+              fontWeight: 600,
+            }}
+          >
+            SEE THE WORLD DIFFERENTLY.
+          </p>
+
+          <button
+            onClick={scrollToCollection}
+            className="btn-primary hero-btn"
+            style={{
+              padding: '0.75rem 1.75rem',
+              fontSize: '0.75rem',
+              letterSpacing: '0.16em',
+            }}
+          >
+            <span>BROWSE ALL 20 FRAMES</span>
+            <ArrowRight size={14} />
+          </button>
+        </div>
+
+      </div>
+
+      <style jsx>{`
+        /* Desktop Default (min-width: 900px) */
+        .hero-overlay-card {
+          max-width: 480px;
+          text-align: left;
+          left: clamp(2rem, 5vw, 4.5rem);
+          top: 50%;
+          transform: translate3d(0, -50%, 0);
+          background: radial-gradient(circle at 20% 50%, rgba(5, 5, 7, 0.85) 0%, rgba(5, 5, 7, 0.5) 60%, transparent 100%);
+          padding: 1.75rem 2rem;
+          border-radius: 20px;
+        }
+
+        .phase-left {
+          max-width: 460px;
+          text-align: left;
+          left: clamp(2rem, 5vw, 4.5rem);
+          top: 50%;
+          transform: translate3d(0, -50%, 0);
+          background: radial-gradient(circle at 20% 50%, rgba(5, 5, 7, 0.85) 0%, rgba(5, 5, 7, 0.4) 60%, transparent 100%);
+          padding: 1.75rem 2rem;
+          border-radius: 20px;
+        }
+
+        .phase-right {
+          max-width: 460px;
+          text-align: right;
+          right: clamp(2rem, 5vw, 4.5rem);
+          top: 50%;
+          transform: translate3d(0, -50%, 0);
+          background: radial-gradient(circle at 80% 50%, rgba(5, 5, 7, 0.85) 0%, rgba(5, 5, 7, 0.4) 60%, transparent 100%);
+          padding: 1.75rem 2rem;
+          border-radius: 20px;
+        }
+
+        .phase-center {
+          max-width: 580px;
+          text-align: center;
+          left: 50%;
+          top: 50%;
+          transform: translate3d(-50%, -50%, 0);
+          background: radial-gradient(circle at 50% 50%, rgba(5, 5, 7, 0.88) 0%, rgba(5, 5, 7, 0.4) 70%, transparent 100%);
+          padding: 2rem;
+          border-radius: 24px;
+        }
+
+        /* Small Desktop / Laptop Screen Heights (max-height: 740px) */
+        @media (min-width: 900px) and (max-height: 740px) {
+          .hero-overlay-card,
+          .phase-left,
+          .phase-right,
+          .phase-center {
+            padding: 1.25rem 1.5rem !important;
+          }
+        }
+
+        /* Mobile & Tablet Specific Layout (max-width: 899px) */
+        @media (max-width: 899px) {
+          .hero-overlay-card,
+          .phase-left,
+          .phase-right,
+          .phase-center {
+            position: absolute !important;
+            left: 1rem !important;
+            right: 1rem !important;
+            bottom: 1.25rem !important;
+            top: auto !important;
+            max-width: 100% !important;
+            transform: none !important;
+            text-align: center !important;
+            padding: 1.25rem 1rem !important;
+            background: linear-gradient(to top, rgba(5, 5, 7, 0.98) 0%, rgba(5, 5, 7, 0.88) 75%, rgba(5, 5, 7, 0.6) 100%) !important;
+            border-radius: 18px !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7) !important;
+          }
+
+          .hero-break {
+            display: none;
+          }
+
+          .hero-cta-group {
+            justify-content: center !important;
+          }
+
+          .hero-overlay-card p,
+          .phase-left p,
+          .phase-right p,
+          .phase-center p {
+            margin-left: auto !important;
+            margin-right: auto !important;
+          }
+        }
+
+        /* Mobile screens (< 480px) */
+        @media (max-width: 480px) {
+          .hero-overlay-card,
+          .phase-left,
+          .phase-right,
+          .phase-center {
+            bottom: 0.75rem !important;
+            padding: 1.1rem 0.9rem !important;
+          }
+
+          .hero-cta-group {
+            flex-direction: column !important;
+            gap: 0.5rem !important;
+            width: 100% !important;
+          }
+
+          .hero-btn {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            padding: 0.65rem 1rem !important;
+          }
+        }
+      `}</style>
+    </div>
+  );
+});
+
+StoryOverlays.displayName = 'StoryOverlays';
+
+export default StoryOverlays;
