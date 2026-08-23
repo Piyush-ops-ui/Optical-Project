@@ -81,19 +81,29 @@ export default function ScrollCanvasEngine({
     let offsetX = 0;
     let offsetY = 0;
 
-    // Detect mobile portrait viewport (< 768px or portrait aspect ratio)
-    const isMobile = rect.width <= 768 || canvasAspect < 1.05;
+    // Detect mobile viewport (width <= 768px or portrait aspect ratio)
+    const isMobile = rect.width <= 768 || canvasAspect < 1.1;
 
     if (isMobile) {
-      // Mobile: Intelligently fit full subject width (no cropping of sunglasses)
-      drawWidth = canvasWidth * 0.98;
+      // Mobile Subject-Safe Framing:
+      // Scale so the core 3D subject fills the width with safe margins, avoiding both tiny letterboxing and aggressive cropping
+      const mobileScale = Math.min(1.35, Math.max(1.15, canvasHeight / (canvasWidth * 1.5)));
+      drawWidth = canvasWidth * mobileScale;
       drawHeight = drawWidth / imgAspect;
       offsetX = (canvasWidth - drawWidth) / 2;
-      
-      // Position in the upper-middle visual focal zone (centered around ~39% viewport height)
-      offsetY = (canvasHeight * 0.39) - (drawHeight / 2);
+
+      // Position in the vertical safe zone between top navbar (80px) and bottom story card (~200px)
+      const topSafeMargin = 80 * dpr;
+      const bottomSafeMargin = 210 * dpr;
+      const availableHeight = canvasHeight - topSafeMargin - bottomSafeMargin;
+      offsetY = topSafeMargin + (availableHeight - drawHeight) / 2;
+
+      // Ensure it never goes above top navbar
+      if (offsetY < 65 * dpr) {
+        offsetY = 65 * dpr;
+      }
     } else {
-      // Desktop / Landscape: Cover math
+      // Desktop / Landscape: Wide cinematic cover math
       if (canvasAspect > imgAspect) {
         drawWidth = canvasWidth;
         drawHeight = canvasWidth / imgAspect;

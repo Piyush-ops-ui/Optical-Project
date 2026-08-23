@@ -25,7 +25,7 @@ export default function HomePage() {
 
   const handleLoadingProgress = (progress: number) => {
     setLoadProgress(progress);
-    if (progress >= 40) {
+    if (progress >= 20) {
       setIsLoaded(true);
     }
   };

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface LoadingScreenProps {
   progress: number;
@@ -8,7 +8,18 @@ interface LoadingScreenProps {
 }
 
 export default function LoadingScreen({ progress, isLoaded }: LoadingScreenProps) {
-  if (isLoaded) return null;
+  const [shouldRender, setShouldRender] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (isLoaded) {
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+      }, 700);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoaded]);
+
+  if (!shouldRender) return null;
 
   return (
     <div
@@ -22,9 +33,10 @@ export default function LoadingScreen({ progress, isLoaded }: LoadingScreenProps
         alignItems: 'center',
         justifyContent: 'center',
         padding: '2rem',
-        transition: 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s',
+        transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s',
         opacity: isLoaded ? 0 : 1,
         pointerEvents: isLoaded ? 'none' : 'auto',
+        visibility: isLoaded ? 'hidden' : 'visible',
       }}
     >
       {/* Background ambient lighting */}
@@ -109,7 +121,7 @@ export default function LoadingScreen({ progress, isLoaded }: LoadingScreenProps
               top: 0,
               left: 0,
               bottom: 0,
-              width: `${progress}%`,
+              width: `${Math.max(progress, isLoaded ? 100 : 0)}%`,
               background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, #ffffff 100%)',
               boxShadow: '0 0 15px rgba(255, 255, 255, 0.8)',
               transition: 'width 0.25s ease-out',
@@ -130,7 +142,7 @@ export default function LoadingScreen({ progress, isLoaded }: LoadingScreenProps
           }}
         >
           <span>Curating Experience</span>
-          <span style={{ color: '#ffffff', fontWeight: 600 }}>{progress}%</span>
+          <span style={{ color: '#ffffff', fontWeight: 600 }}>{Math.max(progress, isLoaded ? 100 : 0)}%</span>
         </div>
       </div>
     </div>
