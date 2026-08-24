@@ -473,11 +473,11 @@ export const SITE_CONFIG = {
   url: 'https://tiwarioptical.com',
   ogImage: '/frames/ezgif-frame-075.jpg',
   storeInfo: {
-    address: 'Shop No. 12, Heritage Eyewear Arcade, Luxury High Street, New Delhi - 110001 (Placeholder)',
+    address: 'Tiwari Opticals, Wardha, Maharashtra',
     phone: '+91 87889 83420',
     email: 'concierge@tiwarioptical.com',
     hours: 'Monday – Sunday: 10:30 AM – 09:30 PM',
     whatsapp: `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(2, 7)} ${WHATSAPP_NUMBER.slice(7)}`,
-    googleMapsUrl: 'https://maps.google.com'
+    googleMapsUrl: 'https://maps.app.goo.gl/kzREybZeoh14mAUG9'
   }
 };

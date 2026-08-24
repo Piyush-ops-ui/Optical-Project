@@ -99,9 +99,24 @@ export default function Contact() {
                 <span style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#6e7485', display: 'block', marginBottom: '0.2rem' }}>
                   Boutique Location
                 </span>
-                <p style={{ color: '#ffffff', fontSize: '0.92rem', lineHeight: 1.5, fontWeight: 500 }}>
+                <a
+                  href={SITE_CONFIG.storeInfo.googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '0.92rem',
+                    lineHeight: 1.5,
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    display: 'block',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#d4af37')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = '#ffffff')}
+                >
                   {SITE_CONFIG.storeInfo.address}
-                </p>
+                </a>
               </div>
             </div>
 
@@ -215,38 +230,46 @@ export default function Contact() {
 
               {/* Pin Indicator */}
               <div style={{ textAlign: 'center', position: 'relative', zIndex: 5 }}>
-                <div
-                  style={{
-                    width: '52px',
-                    height: '52px',
-                    borderRadius: '50%',
-                    backgroundColor: 'rgba(212, 175, 55, 0.15)',
-                    border: '1px solid rgba(212, 175, 55, 0.4)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 0.85rem auto',
-                    boxShadow: '0 0 30px rgba(212, 175, 55, 0.35)',
-                    animation: 'floatSlow 4s ease-in-out infinite',
-                  }}
+                <a
+                  href={SITE_CONFIG.storeInfo.googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: 'none', display: 'inline-block' }}
                 >
-                  <MapPin size={24} color="#d4af37" />
-                </div>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-serif)',
-                    fontSize: 'clamp(1rem, 2vw, 1.15rem)',
-                    letterSpacing: '0.12em',
-                    color: '#ffffff',
-                    fontWeight: 600,
-                    display: 'block',
-                  }}
-                >
-                  TIWARI OPTICAL BOUTIQUE
-                </span>
-                <span style={{ fontSize: '0.72rem', color: '#8e92a2', letterSpacing: '0.04em' }}>
-                  Heritage Eyewear Arcade • New Delhi
-                </span>
+                  <div
+                    style={{
+                      width: '52px',
+                      height: '52px',
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(212, 175, 55, 0.15)',
+                      border: '1px solid rgba(212, 175, 55, 0.4)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '0 auto 0.85rem auto',
+                      boxShadow: '0 0 30px rgba(212, 175, 55, 0.35)',
+                      animation: 'floatSlow 4s ease-in-out infinite',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <MapPin size={24} color="#d4af37" />
+                  </div>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-serif)',
+                      fontSize: 'clamp(1rem, 2vw, 1.15rem)',
+                      letterSpacing: '0.12em',
+                      color: '#ffffff',
+                      fontWeight: 600,
+                      display: 'block',
+                    }}
+                  >
+                    TIWARI OPTICALS
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: '#8e92a2', letterSpacing: '0.04em' }}>
+                    Wardha, Maharashtra
+                  </span>
+                </a>
               </div>
             </div>
 
