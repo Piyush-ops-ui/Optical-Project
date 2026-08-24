@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Product } from '@/types';
-import { Sparkles, Eye, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { Eye, ArrowUpRight } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
@@ -15,6 +15,7 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
       onClick={() => onSelect(product)}
       role="button"
       tabIndex={0}
+      aria-label={`View details for ${product.name}, priced at ₹${product.price}`}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -22,17 +23,17 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
         }
       }}
       style={{
-        backgroundColor: 'rgba(13, 15, 22, 0.7)',
-        borderRadius: '16px',
+        backgroundColor: 'rgba(13, 15, 22, 0.75)',
+        borderRadius: '18px',
         border: '1px solid rgba(255, 255, 255, 0.08)',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
         cursor: 'pointer',
-        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
       }}
       className="product-card"
     >
@@ -40,27 +41,27 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
       <div
         style={{
           position: 'absolute',
-          top: '1rem',
-          left: '1rem',
+          top: '0.85rem',
+          left: '0.85rem',
           zIndex: 10,
           display: 'flex',
-          gap: '0.4rem',
+          gap: '0.35rem',
           flexWrap: 'wrap',
         }}
       >
         {product.isBestSeller && (
           <span
             style={{
-              fontSize: '0.625rem',
+              fontSize: '0.62rem',
               fontWeight: 600,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
-              backgroundColor: 'rgba(212, 175, 55, 0.15)',
+              backgroundColor: 'rgba(212, 175, 55, 0.18)',
               color: '#f3e5ab',
-              border: '1px solid rgba(212, 175, 55, 0.3)',
-              padding: '0.2rem 0.6rem',
+              border: '1px solid rgba(212, 175, 55, 0.4)',
+              padding: '0.2rem 0.55rem',
               borderRadius: '9999px',
-              backdropFilter: 'blur(8px)',
+              backdropFilter: 'blur(10px)',
             }}
           >
             Bestseller
@@ -69,16 +70,16 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
         {product.isNew && (
           <span
             style={{
-              fontSize: '0.625rem',
+              fontSize: '0.62rem',
               fontWeight: 600,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
               backgroundColor: 'rgba(255, 255, 255, 0.12)',
               color: '#ffffff',
               border: '1px solid rgba(255, 255, 255, 0.25)',
-              padding: '0.2rem 0.6rem',
+              padding: '0.2rem 0.55rem',
               borderRadius: '9999px',
-              backdropFilter: 'blur(8px)',
+              backdropFilter: 'blur(10px)',
             }}
           >
             New Arrival
@@ -90,21 +91,22 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
       <div
         style={{
           position: 'absolute',
-          top: '1rem',
-          right: '1rem',
+          top: '0.85rem',
+          right: '0.85rem',
           zIndex: 10,
         }}
       >
         <span
           style={{
-            fontSize: '0.65rem',
-            letterSpacing: '0.15em',
+            fontSize: '0.62rem',
+            letterSpacing: '0.14em',
             textTransform: 'uppercase',
             color: '#8e92a2',
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            padding: '0.25rem 0.65rem',
+            backgroundColor: 'rgba(0, 0, 0, 0.55)',
+            padding: '0.22rem 0.6rem',
             borderRadius: '6px',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(8px)',
           }}
         >
           {product.category}
@@ -116,7 +118,7 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
         style={{
           position: 'relative',
           width: '100%',
-          paddingTop: '65%',
+          paddingTop: '62%',
           backgroundColor: '#07080c',
           overflow: 'hidden',
         }}
@@ -128,8 +130,8 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '70%',
-            height: '70%',
+            width: '75%',
+            height: '75%',
             background: 'radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%)',
             borderRadius: '50%',
             pointerEvents: 'none',
@@ -147,32 +149,32 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+            transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
           className="product-img"
         />
 
-        {/* Hover Quick View Trigger */}
+        {/* Hover / Quick View Trigger (Desktop) */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundColor: 'rgba(5, 5, 7, 0.4)',
+            backgroundColor: 'rgba(5, 5, 7, 0.45)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             opacity: 0,
-            transition: 'opacity 0.3s ease',
+            transition: 'opacity 0.25s ease',
           }}
           className="product-hover-overlay"
         >
           <div
             style={{
-              padding: '0.55rem 1.25rem',
+              padding: '0.5rem 1.15rem',
               borderRadius: '9999px',
               backgroundColor: 'rgba(255, 255, 255, 0.95)',
               color: '#050507',
-              fontSize: '0.75rem',
+              fontSize: '0.72rem',
               fontWeight: 600,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
@@ -182,16 +184,16 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
               boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4)',
             }}
           >
-            <Eye size={14} />
-            <span>View Product</span>
+            <Eye size={13} />
+            <span>View Frame</span>
           </div>
         </div>
       </div>
 
-      {/* Product Content Details */}
+      {/* Product Details */}
       <div
         style={{
-          padding: '1.4rem',
+          padding: '1.25rem',
           display: 'flex',
           flexDirection: 'column',
           flexGrow: 1,
@@ -202,13 +204,13 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
           {/* Brand line */}
           <span
             style={{
-              fontSize: '0.6875rem',
+              fontSize: '0.65rem',
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
               color: '#7e8395',
               fontWeight: 500,
               display: 'block',
-              marginBottom: '0.35rem',
+              marginBottom: '0.3rem',
             }}
           >
             {product.brand}
@@ -218,11 +220,11 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
           <h3
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: '1.15rem',
+              fontSize: 'clamp(1rem, 2vw, 1.15rem)',
               fontWeight: 600,
-              letterSpacing: '0.08em',
+              letterSpacing: '0.06em',
               color: '#ffffff',
-              marginBottom: '0.5rem',
+              marginBottom: '0.45rem',
             }}
           >
             {product.name}
@@ -231,10 +233,10 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
           {/* Short description */}
           <p
             style={{
-              fontSize: '0.8125rem',
+              fontSize: '0.78rem',
               color: '#8e92a2',
-              lineHeight: 1.55,
-              marginBottom: '1.25rem',
+              lineHeight: 1.5,
+              marginBottom: '1rem',
               display: '-webkit-box',
               WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
@@ -251,16 +253,16 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingTop: '1rem',
+            paddingTop: '0.85rem',
             borderTop: '1px solid rgba(255, 255, 255, 0.06)',
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.45rem' }}>
               <span
                 style={{
                   fontFamily: 'var(--font-sans)',
-                  fontSize: '1.25rem',
+                  fontSize: '1.15rem',
                   fontWeight: 700,
                   color: '#ffffff',
                 }}
@@ -270,7 +272,7 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
               {product.originalPrice && (
                 <span
                   style={{
-                    fontSize: '0.85rem',
+                    fontSize: '0.8rem',
                     color: '#656a7a',
                     textDecoration: 'line-through',
                   }}
@@ -281,13 +283,13 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
             </div>
             <span
               style={{
-                fontSize: '0.65rem',
-                letterSpacing: '0.1em',
+                fontSize: '0.62rem',
+                letterSpacing: '0.08em',
                 color: '#a3b8cc',
                 display: 'block',
               }}
             >
-              Includes demo case & cloth
+              Includes bespoke case & cloth
             </span>
           </div>
 
@@ -303,10 +305,11 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
               justifyContent: 'center',
               color: '#ffffff',
               transition: 'all 0.3s ease',
+              flexShrink: 0,
             }}
             className="arrow-circle"
           >
-            <ArrowUpRight size={16} />
+            <ArrowUpRight size={15} />
           </div>
         </div>
       </div>
@@ -317,6 +320,9 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
           transform: translateY(-4px);
           box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.03);
           background-color: rgba(18, 21, 30, 0.85);
+        }
+        .product-card:active {
+          transform: scale(0.98);
         }
         .product-card:hover .product-img {
           transform: scale(1.05);

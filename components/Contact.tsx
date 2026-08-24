@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MapPin, Phone, Clock, MessageSquare, Mail, Compass, ExternalLink } from 'lucide-react';
+import { MapPin, Phone, Clock, MessageSquare, Mail, ExternalLink } from 'lucide-react';
 import { SITE_CONFIG } from '@/data/products';
 
 export default function Contact() {
@@ -10,22 +10,22 @@ export default function Contact() {
       id="contact"
       style={{
         backgroundColor: '#050507',
-        padding: '7rem 0 6rem 0',
+        padding: 'clamp(4.5rem, 8vw, 7rem) 0 clamp(4rem, 6vw, 6rem) 0',
         position: 'relative',
       }}
     >
       <div className="luxury-container" style={{ position: 'relative', zIndex: 10 }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(2.5rem, 5vw, 4rem)' }}>
           <span
             style={{
-              fontSize: '0.68rem',
+              fontSize: '0.65rem',
               letterSpacing: '0.25em',
               color: '#d4af37',
               textTransform: 'uppercase',
               fontWeight: 600,
               display: 'block',
-              marginBottom: '0.75rem',
+              marginBottom: '0.65rem',
             }}
           >
             Visit Our Boutique
@@ -34,11 +34,11 @@ export default function Contact() {
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(2.25rem, 5vw, 3.5rem)',
-              letterSpacing: '0.2em',
+              fontSize: 'clamp(1.85rem, 4.5vw, 3.5rem)',
+              letterSpacing: '0.18em',
               fontWeight: 800,
               color: '#ffffff',
-              marginBottom: '1rem',
+              marginBottom: '0.75rem',
               textTransform: 'uppercase',
             }}
           >
@@ -47,7 +47,7 @@ export default function Contact() {
 
           <p
             style={{
-              fontSize: '1rem',
+              fontSize: 'clamp(0.88rem, 1.2vw, 1.05rem)',
               color: '#8e92a2',
               maxWidth: '520px',
               margin: '0 auto',
@@ -61,32 +61,31 @@ export default function Contact() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '2.5rem',
-            marginBottom: '3rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
+            gap: 'clamp(1.5rem, 3vw, 2.5rem)',
           }}
         >
           {/* Contact Details Card */}
           <div
             style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.02)',
+              backgroundColor: 'rgba(255, 255, 255, 0.025)',
               borderRadius: '20px',
               border: '1px solid rgba(255, 255, 255, 0.08)',
-              padding: '2.5rem',
+              padding: 'clamp(1.5rem, 3vw, 2.25rem)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '2rem',
+              gap: '1.75rem',
             }}
           >
             {/* Address */}
-            <div style={{ display: 'flex', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', gap: '1.15rem' }}>
               <div
                 style={{
-                  width: '44px',
-                  height: '44px',
+                  width: '42px',
+                  height: '42px',
                   borderRadius: '12px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  backgroundColor: 'rgba(212, 175, 55, 0.08)',
+                  border: '1px solid rgba(212, 175, 55, 0.25)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -94,24 +93,24 @@ export default function Contact() {
                   color: '#d4af37',
                 }}
               >
-                <MapPin size={20} />
+                <MapPin size={18} />
               </div>
               <div>
-                <span style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#6e7485', display: 'block', marginBottom: '0.25rem' }}>
-                  Boutique Location (Placeholder)
+                <span style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#6e7485', display: 'block', marginBottom: '0.2rem' }}>
+                  Boutique Location
                 </span>
-                <p style={{ color: '#ffffff', fontSize: '0.95rem', lineHeight: 1.5, fontWeight: 500 }}>
+                <p style={{ color: '#ffffff', fontSize: '0.92rem', lineHeight: 1.5, fontWeight: 500 }}>
                   {SITE_CONFIG.storeInfo.address}
                 </p>
               </div>
             </div>
 
             {/* Phone & WhatsApp */}
-            <div style={{ display: 'flex', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', gap: '1.15rem' }}>
               <div
                 style={{
-                  width: '44px',
-                  height: '44px',
+                  width: '42px',
+                  height: '42px',
                   borderRadius: '12px',
                   backgroundColor: 'rgba(255, 255, 255, 0.05)',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -122,27 +121,36 @@ export default function Contact() {
                   color: '#ffffff',
                 }}
               >
-                <Phone size={20} />
+                <Phone size={18} />
               </div>
               <div>
-                <span style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#6e7485', display: 'block', marginBottom: '0.25rem' }}>
-                  Phone & WhatsApp (Placeholder)
+                <span style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#6e7485', display: 'block', marginBottom: '0.2rem' }}>
+                  Phone & Concierge
                 </span>
-                <p style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: 500 }}>
+                <a
+                  href={`tel:${SITE_CONFIG.storeInfo.phone.replace(/[^0-9+]/g, '')}`}
+                  style={{
+                    color: '#ffffff',
+                    fontSize: '0.92rem',
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    display: 'block',
+                  }}
+                >
                   {SITE_CONFIG.storeInfo.phone}
-                </p>
-                <span style={{ fontSize: '0.75rem', color: '#8e92a2' }}>
+                </a>
+                <span style={{ fontSize: '0.72rem', color: '#8e92a2', marginTop: '2px', display: 'block' }}>
                   WhatsApp Concierge available daily
                 </span>
               </div>
             </div>
 
             {/* Store Hours */}
-            <div style={{ display: 'flex', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', gap: '1.15rem' }}>
               <div
                 style={{
-                  width: '44px',
-                  height: '44px',
+                  width: '42px',
+                  height: '42px',
                   borderRadius: '12px',
                   backgroundColor: 'rgba(255, 255, 255, 0.05)',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -153,23 +161,23 @@ export default function Contact() {
                   color: '#a3b8cc',
                 }}
               >
-                <Clock size={20} />
+                <Clock size={18} />
               </div>
               <div>
-                <span style={{ fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#6e7485', display: 'block', marginBottom: '0.25rem' }}>
-                  Visiting Hours (Placeholder)
+                <span style={{ fontSize: '0.65rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#6e7485', display: 'block', marginBottom: '0.2rem' }}>
+                  Visiting Hours
                 </span>
-                <p style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: 500 }}>
+                <p style={{ color: '#ffffff', fontSize: '0.92rem', fontWeight: 500 }}>
                   {SITE_CONFIG.storeInfo.hours}
                 </p>
-                <span style={{ fontSize: '0.75rem', color: '#8e92a2' }}>
+                <span style={{ fontSize: '0.72rem', color: '#8e92a2', marginTop: '2px', display: 'block' }}>
                   Complimentary lens testing & custom fitting
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Interactive Map Visual Placeholder */}
+          {/* Interactive Map Visual */}
           <div
             style={{
               backgroundColor: '#0c0e14',
@@ -181,17 +189,17 @@ export default function Contact() {
               position: 'relative',
             }}
           >
-            {/* Map styling simulated container */}
+            {/* Map styling container */}
             <div
               style={{
                 flexGrow: 1,
-                minHeight: '260px',
+                minHeight: '240px',
                 position: 'relative',
                 background: 'radial-gradient(circle at 60% 40%, #151924 0%, #08090d 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '2rem',
+                padding: 'clamp(1.5rem, 3vw, 2rem)',
               }}
             >
               {/* Grid graphic lines */}
@@ -209,25 +217,25 @@ export default function Contact() {
               <div style={{ textAlign: 'center', position: 'relative', zIndex: 5 }}>
                 <div
                   style={{
-                    width: '56px',
-                    height: '56px',
+                    width: '52px',
+                    height: '52px',
                     borderRadius: '50%',
                     backgroundColor: 'rgba(212, 175, 55, 0.15)',
                     border: '1px solid rgba(212, 175, 55, 0.4)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    margin: '0 auto 1rem auto',
-                    boxShadow: '0 0 30px rgba(212, 175, 55, 0.3)',
+                    margin: '0 auto 0.85rem auto',
+                    boxShadow: '0 0 30px rgba(212, 175, 55, 0.35)',
                     animation: 'floatSlow 4s ease-in-out infinite',
                   }}
                 >
-                  <MapPin size={26} color="#d4af37" />
+                  <MapPin size={24} color="#d4af37" />
                 </div>
                 <span
                   style={{
                     fontFamily: 'var(--font-serif)',
-                    fontSize: '1.1rem',
+                    fontSize: 'clamp(1rem, 2vw, 1.15rem)',
                     letterSpacing: '0.12em',
                     color: '#ffffff',
                     fontWeight: 600,
@@ -236,8 +244,8 @@ export default function Contact() {
                 >
                   TIWARI OPTICAL BOUTIQUE
                 </span>
-                <span style={{ fontSize: '0.75rem', color: '#8e92a2', letterSpacing: '0.05em' }}>
-                  Interactive Google Maps Location (Placeholder)
+                <span style={{ fontSize: '0.72rem', color: '#8e92a2', letterSpacing: '0.04em' }}>
+                  Heritage Eyewear Arcade • New Delhi
                 </span>
               </div>
             </div>
@@ -245,15 +253,17 @@ export default function Contact() {
             {/* Map Action Bar */}
             <div
               style={{
-                padding: '1.25rem 1.75rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                padding: '1rem 1.5rem',
+                backgroundColor: 'rgba(255, 255, 255, 0.025)',
                 borderTop: '1px solid rgba(255, 255, 255, 0.06)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '0.75rem',
               }}
             >
-              <span style={{ fontSize: '0.75rem', color: '#787d8d' }}>
+              <span style={{ fontSize: '0.72rem', color: '#787d8d' }}>
                 Open in Google Maps
               </span>
               <a
@@ -273,3 +283,4 @@ export default function Contact() {
     </section>
   );
 }
+

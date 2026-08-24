@@ -6,17 +6,17 @@ import { Eye, Shield, Feather, Sparkles } from 'lucide-react';
 export default function About() {
   const craftFeatures = [
     {
-      icon: <Shield size={24} color="#d4af37" />,
+      icon: <Shield size={22} color="#d4af37" />,
       title: 'Optically Pure Polarized TAC',
       description: 'Engineered with 99.9% anti-glare filtering and full spectrum UV400 solar shielding for uncompromising clarity.',
     },
     {
-      icon: <Feather size={24} color="#a3b8cc" />,
+      icon: <Feather size={22} color="#a3b8cc" />,
       title: 'Featherlight Ergonomics',
       description: 'Sculpted from aerospace-grade Japanese titanium and lightweight Italian bio-acetate for all-day weightless comfort.',
     },
     {
-      icon: <Eye size={24} color="#ffffff" />,
+      icon: <Eye size={22} color="#ffffff" />,
       title: 'Bespoke Contour Fit',
       description: 'Precision-angled temples and hand-aligned 5-barrel hinges designed to contour naturally to every facial architecture.',
     },
@@ -27,7 +27,7 @@ export default function About() {
       id="about"
       style={{
         backgroundColor: '#07080c',
-        padding: '7rem 0 6rem 0',
+        padding: 'clamp(4.5rem, 8vw, 7rem) 0 clamp(4rem, 6vw, 6rem) 0',
         position: 'relative',
         borderTop: '1px solid rgba(255, 255, 255, 0.06)',
         borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
@@ -40,9 +40,9 @@ export default function About() {
           position: 'absolute',
           top: '30%',
           right: '5%',
-          width: '600px',
-          height: '600px',
-          background: 'radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%)',
+          width: 'clamp(300px, 50vw, 600px)',
+          height: 'clamp(300px, 50vw, 600px)',
+          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.03) 0%, transparent 70%)',
           borderRadius: '50%',
           pointerEvents: 'none',
         }}
@@ -52,10 +52,10 @@ export default function About() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '4rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
+            gap: 'clamp(2.5rem, 5vw, 4.5rem)',
             alignItems: 'center',
-            marginBottom: '5rem',
+            marginBottom: 'clamp(3rem, 6vw, 5rem)',
           }}
         >
           {/* Left: Editorial Headline */}
@@ -64,20 +64,20 @@ export default function About() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.35rem 0.9rem',
+                gap: '0.45rem',
+                padding: '0.3rem 0.85rem',
                 borderRadius: '9999px',
-                background: 'rgba(255, 255, 255, 0.04)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                marginBottom: '1.25rem',
+                background: 'rgba(212, 175, 55, 0.08)',
+                border: '1px solid rgba(212, 175, 55, 0.3)',
+                marginBottom: '1rem',
               }}
             >
-              <Sparkles size={13} color="#d4af37" />
+              <Sparkles size={12} color="#d4af37" />
               <span
                 style={{
-                  fontSize: '0.68rem',
-                  letterSpacing: '0.25em',
-                  color: '#d4af37',
+                  fontSize: '0.65rem',
+                  letterSpacing: '0.22em',
+                  color: '#f3e5ab',
                   textTransform: 'uppercase',
                   fontWeight: 600,
                 }}
@@ -89,12 +89,12 @@ export default function About() {
             <h2
               style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(2.25rem, 4.5vw, 3.5rem)',
+                fontSize: 'clamp(1.85rem, 4.2vw, 3.5rem)',
                 lineHeight: 1.15,
                 letterSpacing: '0.15em',
                 fontWeight: 800,
                 color: '#ffffff',
-                marginBottom: '1.5rem',
+                marginBottom: '1.25rem',
                 textTransform: 'uppercase',
               }}
             >
@@ -104,10 +104,10 @@ export default function About() {
 
             <p
               style={{
-                fontSize: 'clamp(1rem, 1.4vw, 1.15rem)',
-                lineHeight: 1.8,
+                fontSize: 'clamp(0.92rem, 1.3vw, 1.12rem)',
+                lineHeight: 1.75,
                 color: '#b0b5c5',
-                marginBottom: '1.5rem',
+                marginBottom: '1.25rem',
                 fontWeight: 400,
               }}
             >
@@ -116,9 +116,9 @@ export default function About() {
 
             <p
               style={{
-                fontSize: '0.9rem',
-                lineHeight: 1.7,
-                color: '#717585',
+                fontSize: '0.85rem',
+                lineHeight: 1.65,
+                color: '#787d8e',
               }}
             >
               Every piece in our showcase is selected to marry timeless optical heritage with modern minimalist refinement.
@@ -142,7 +142,7 @@ export default function About() {
               alt="Tiwari Optical Craftsmanship"
               style={{
                 width: '100%',
-                height: '420px',
+                height: 'clamp(240px, 45vw, 420px)',
                 objectFit: 'cover',
                 display: 'block',
               }}
@@ -154,18 +154,19 @@ export default function About() {
                 background: 'linear-gradient(to top, rgba(7, 8, 12, 0.95) 0%, transparent 60%)',
                 display: 'flex',
                 alignItems: 'flex-end',
-                padding: '2rem',
+                padding: 'clamp(1.25rem, 3vw, 2rem)',
               }}
             >
               <div>
                 <span
                   style={{
-                    fontSize: '0.65rem',
-                    letterSpacing: '0.25em',
+                    fontSize: '0.62rem',
+                    letterSpacing: '0.22em',
                     textTransform: 'uppercase',
                     color: '#d4af37',
                     display: 'block',
-                    marginBottom: '0.35rem',
+                    marginBottom: '0.3rem',
+                    fontWeight: 600,
                   }}
                 >
                   Authentic Geometry
@@ -173,7 +174,7 @@ export default function About() {
                 <span
                   style={{
                     fontFamily: 'var(--font-serif)',
-                    fontSize: '1.25rem',
+                    fontSize: 'clamp(1.05rem, 2vw, 1.25rem)',
                     letterSpacing: '0.12em',
                     color: '#ffffff',
                     fontWeight: 600,
@@ -190,37 +191,51 @@ export default function About() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '2rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gap: 'clamp(1.25rem, 2.5vw, 2rem)',
           }}
         >
           {craftFeatures.map((feature, idx) => (
             <div
               key={idx}
               style={{
-                padding: '2rem',
-                backgroundColor: 'rgba(255, 255, 255, 0.02)',
-                borderRadius: '16px',
-                border: '1px solid rgba(255, 255, 255, 0.07)',
+                padding: 'clamp(1.5rem, 3vw, 2rem)',
+                backgroundColor: 'rgba(255, 255, 255, 0.025)',
+                borderRadius: '18px',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
                 transition: 'all 0.3s ease',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.04)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.18)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.02)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.07)';
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.025)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
               }}
             >
-              <div style={{ marginBottom: '1.25rem' }}>{feature.icon}</div>
+              <div
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '12px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '1.15rem',
+                }}
+              >
+                {feature.icon}
+              </div>
               <h3
                 style={{
                   fontFamily: 'var(--font-serif)',
-                  fontSize: '1.15rem',
+                  fontSize: '1.1rem',
                   letterSpacing: '0.06em',
                   color: '#ffffff',
-                  marginBottom: '0.75rem',
+                  marginBottom: '0.6rem',
                   fontWeight: 600,
                 }}
               >
@@ -228,8 +243,8 @@ export default function About() {
               </h3>
               <p
                 style={{
-                  fontSize: '0.85rem',
-                  lineHeight: 1.65,
+                  fontSize: '0.82rem',
+                  lineHeight: 1.6,
                   color: '#8e92a2',
                 }}
               >
@@ -242,3 +257,4 @@ export default function About() {
     </section>
   );
 }
+

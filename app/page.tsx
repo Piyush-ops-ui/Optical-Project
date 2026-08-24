@@ -23,17 +23,17 @@ export default function HomePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleLoadingProgress = (progress: number) => {
+  const handleLoadingProgress = React.useCallback((progress: number) => {
     setLoadProgress(progress);
-    if (progress >= 20) {
+    if (progress >= 30) {
       setIsLoaded(true);
     }
-  };
+  }, []);
 
-  const handleLoadingComplete = () => {
+  const handleLoadingComplete = React.useCallback(() => {
     setLoadProgress(100);
     setIsLoaded(true);
-  };
+  }, []);
 
   return (
     <LenisProvider>

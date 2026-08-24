@@ -5,7 +5,7 @@ import { DEMO_PRODUCTS, CATEGORIES } from '@/data/products';
 import { Product } from '@/types';
 import ProductGrid from './ProductGrid';
 import ProductModal from './ProductModal';
-import { Search, SlidersHorizontal, ArrowDownUp, Sparkles } from 'lucide-react';
+import { Search, ArrowDownUp, Sparkles, X, RotateCcw } from 'lucide-react';
 
 export default function Collection() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -34,67 +34,73 @@ export default function Collection() {
     });
   }, [selectedCategory, searchQuery, sortBy]);
 
+  const resetFilters = () => {
+    setSelectedCategory('All');
+    setSearchQuery('');
+    setSortBy('featured');
+  };
+
   return (
     <section
       id="collection"
       style={{
         backgroundColor: '#050507',
-        padding: '7rem 0 5rem 0',
+        padding: 'clamp(4.5rem, 8vw, 7rem) 0 clamp(4rem, 6vw, 5.5rem) 0',
         position: 'relative',
         zIndex: 20,
       }}
     >
-      {/* Background Ambience */}
+      {/* Background Ambience Glow */}
       <div
         style={{
           position: 'absolute',
           top: '10%',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '1000px',
-          height: '600px',
-          background: 'radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 70%)',
+          width: 'clamp(320px, 80vw, 1000px)',
+          height: 'clamp(300px, 50vw, 600px)',
+          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.03) 0%, transparent 70%)',
           pointerEvents: 'none',
         }}
       />
 
       <div className="luxury-container" style={{ position: 'relative', zIndex: 10 }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 5vw, 3.5rem)' }}>
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.35rem 0.9rem',
+              gap: '0.45rem',
+              padding: '0.3rem 0.85rem',
               borderRadius: '9999px',
-              background: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              marginBottom: '1rem',
+              background: 'rgba(212, 175, 55, 0.08)',
+              border: '1px solid rgba(212, 175, 55, 0.3)',
+              marginBottom: '0.85rem',
             }}
           >
-            <Sparkles size={13} color="#d4af37" />
+            <Sparkles size={12} color="#d4af37" />
             <span
               style={{
-                fontSize: '0.68rem',
-                letterSpacing: '0.25em',
-                color: '#d4af37',
+                fontSize: '0.65rem',
+                letterSpacing: '0.22em',
+                color: '#f3e5ab',
                 textTransform: 'uppercase',
                 fontWeight: 600,
               }}
             >
-              Curated Eyewear
+              Signature Showcase
             </span>
           </div>
 
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(2.25rem, 5vw, 3.5rem)',
-              letterSpacing: '0.2em',
+              fontSize: 'clamp(1.85rem, 4.5vw, 3.5rem)',
+              letterSpacing: '0.18em',
               fontWeight: 800,
               color: '#ffffff',
-              marginBottom: '0.75rem',
+              marginBottom: '0.5rem',
               textTransform: 'uppercase',
             }}
           >
@@ -103,35 +109,38 @@ export default function Collection() {
 
           <p
             style={{
-              fontSize: 'clamp(0.95rem, 1.4vw, 1.1rem)',
+              fontSize: 'clamp(0.85rem, 1.2vw, 1.05rem)',
               color: '#9aa0b2',
-              maxWidth: '550px',
+              maxWidth: '520px',
               margin: '0 auto',
             }}
           >
-            Explore our curated selection of premium sunglasses.
+            Explore our curated selection of 20 signature sunglasses engineered for everyday confidence and distinguished luxury.
           </p>
         </div>
 
-        {/* Filter Controls Bar */}
+        {/* Filter & Controls Bar */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '1.5rem',
-            marginBottom: '3rem',
+            gap: '1.25rem',
+            marginBottom: 'clamp(2rem, 4vw, 3rem)',
           }}
         >
-          {/* Category Filter Pills */}
+          {/* Category Filter Pills (Horizontal scrollable with smooth touch scrolling) */}
           <div
+            className="category-scroll-container"
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
               overflowX: 'auto',
               paddingBottom: '0.5rem',
+              paddingTop: '0.25rem',
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch',
             }}
           >
             {CATEGORIES.map((cat) => {
@@ -141,23 +150,24 @@ export default function Collection() {
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
                   style={{
-                    padding: '0.55rem 1.25rem',
+                    padding: '0.55rem 1.15rem',
                     borderRadius: '9999px',
-                    fontSize: '0.75rem',
+                    fontSize: '0.72rem',
                     fontWeight: 600,
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
                     cursor: 'pointer',
                     whiteSpace: 'nowrap',
-                    transition: 'all 0.3s ease',
+                    transition: 'all 0.25s ease',
+                    minHeight: '38px',
                     border: isSelected
                       ? '1px solid #ffffff'
-                      : '1px solid rgba(255, 255, 255, 0.08)',
+                      : '1px solid rgba(255, 255, 255, 0.1)',
                     backgroundColor: isSelected
                       ? '#ffffff'
-                      : 'rgba(255, 255, 255, 0.03)',
-                    color: isSelected ? '#050507' : '#9498a8',
-                    boxShadow: isSelected ? '0 0 15px rgba(255, 255, 255, 0.2)' : 'none',
+                      : 'rgba(255, 255, 255, 0.04)',
+                    color: isSelected ? '#050507' : '#9ea3b5',
+                    boxShadow: isSelected ? '0 0 16px rgba(255, 255, 255, 0.25)' : 'none',
                   }}
                 >
                   {cat}
@@ -166,35 +176,26 @@ export default function Collection() {
             })}
           </div>
 
-          {/* Search & Sort Bar */}
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '1rem',
-              padding: '1rem 1.25rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.025)',
-              border: '1px solid rgba(255, 255, 255, 0.07)',
-              borderRadius: '14px',
-            }}
-          >
-            {/* Search input */}
+          {/* Search & Sort Bar (Responsive flex) */}
+          <div className="filter-controls-bar">
+            {/* Search Input */}
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.75rem',
+                gap: '0.65rem',
+                backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                padding: '0.65rem 0.9rem',
                 flexGrow: 1,
-                maxWidth: '400px',
-                minWidth: '240px',
+                minWidth: '220px',
               }}
             >
-              <Search size={16} color="#787d8d" />
+              <Search size={16} color="#8e92a2" />
               <input
                 type="text"
-                placeholder="Search styles, colors, materials..."
+                placeholder="Search by name, silhouette, color..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
@@ -202,26 +203,38 @@ export default function Collection() {
                   border: 'none',
                   outline: 'none',
                   color: '#ffffff',
-                  fontSize: '0.85rem',
+                  fontSize: '0.82rem',
                   width: '100%',
                   fontFamily: 'var(--font-sans)',
                 }}
               />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Clear search"
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#8e92a2',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '2px',
+                  }}
+                >
+                  <X size={15} />
+                </button>
+              )}
             </div>
 
             {/* Results counter & Sort Dropdown */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1.5rem',
-              }}
-            >
+            <div className="sort-counter-row">
               <span
                 style={{
                   fontSize: '0.75rem',
-                  color: '#717585',
-                  letterSpacing: '0.05em',
+                  color: '#7e8395',
+                  letterSpacing: '0.04em',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 Showing <strong style={{ color: '#ffffff' }}>{filteredProducts.length}</strong> of 20 Styles
@@ -232,17 +245,18 @@ export default function Collection() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
+                  gap: '0.45rem',
                   backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  padding: '0.4rem 0.85rem',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  padding: '0.5rem 0.85rem',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
                 }}
               >
-                <ArrowDownUp size={14} color="#a0a6b8" />
+                <ArrowDownUp size={13} color="#d4af37" />
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
+                  aria-label="Sort products by"
                   style={{
                     background: 'transparent',
                     border: 'none',
@@ -250,7 +264,7 @@ export default function Collection() {
                     color: '#ffffff',
                     fontSize: '0.75rem',
                     fontWeight: 500,
-                    letterSpacing: '0.05em',
+                    letterSpacing: '0.04em',
                     cursor: 'pointer',
                     fontFamily: 'var(--font-sans)',
                   }}
@@ -269,6 +283,7 @@ export default function Collection() {
         <ProductGrid
           products={filteredProducts}
           onSelectProduct={(product) => setSelectedProduct(product)}
+          onResetFilters={resetFilters}
         />
       </div>
 
@@ -277,6 +292,41 @@ export default function Collection() {
         product={selectedProduct}
         onClose={() => setSelectedProduct(null)}
       />
+
+      <style jsx>{`
+        .filter-controls-bar {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          padding: 0.85rem 1.15rem;
+          background-color: rgba(255, 255, 255, 0.025);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 14px;
+        }
+
+        .sort-counter-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1.25rem;
+          flex-wrap: wrap;
+        }
+
+        @media (max-width: 640px) {
+          .filter-controls-bar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+            padding: 0.75rem;
+          }
+          .sort-counter-row {
+            justify-content: space-between;
+            width: 100%;
+          }
+        }
+      `}</style>
     </section>
   );
 }

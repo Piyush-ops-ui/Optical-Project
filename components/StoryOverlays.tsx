@@ -17,7 +17,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
   // Compute transform and opacity smoothly
   const getPhaseStyles = (progress: number, start: number, peakIn: number, peakOut: number, end: number) => {
     if (progress < start || progress > end) {
-      return { opacity: '0', transform: 'translate3d(0, 16px, 0)', pointerEvents: 'none' };
+      return { opacity: '0', transform: 'translate3d(0, 14px, 0)', pointerEvents: 'none' };
     }
     let opacity = 0;
     let translateY = 0;
@@ -25,20 +25,20 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
     if (progress >= start && progress < peakIn) {
       const t = (progress - start) / (peakIn - start);
       opacity = t;
-      translateY = (1 - t) * 16;
+      translateY = (1 - t) * 14;
     } else if (progress >= peakIn && progress <= peakOut) {
       opacity = 1;
       translateY = 0;
     } else if (progress > peakOut && progress <= end) {
       const t = (progress - peakOut) / (end - peakOut);
       opacity = 1 - t;
-      translateY = -t * 16;
+      translateY = -t * 14;
     }
 
     return {
       opacity: opacity.toFixed(3),
       transform: `translate3d(0, ${translateY.toFixed(1)}px, 0)`,
-      pointerEvents: opacity > 0.3 ? 'auto' : 'none',
+      pointerEvents: opacity > 0.25 ? 'auto' : 'none',
     };
   };
 
@@ -60,7 +60,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
         phase2Ref.current.style.pointerEvents = s.pointerEvents;
       }
 
-      // Phase 3: Architectural Showroom (Progress 0.48 to 0.69)
+      // Phase 3: Architectural Sanctuary (Progress 0.48 to 0.69)
       if (phase3Ref.current) {
         const s = getPhaseStyles(progress, 0.48, 0.54, 0.62, 0.69);
         phase3Ref.current.style.opacity = s.opacity;
@@ -122,7 +122,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
       >
         
         {/* =========================================================================
-            PHASE 1: HERO OVERLAY (Dedicated mobile top/bottom split + desktop card)
+            PHASE 1: HERO OVERLAY (Dedicated mobile top header + bottom card)
            ========================================================================= */}
         <div
           ref={phase1Ref}
@@ -150,13 +150,13 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
                 background: 'rgba(10, 12, 18, 0.85)',
                 border: '1px solid rgba(212, 175, 55, 0.4)',
                 backdropFilter: 'blur(12px)',
-                marginBottom: '0.4rem',
+                marginBottom: '0.35rem',
               }}
             >
               <Sparkles size={10} color="#d4af37" />
               <span
                 style={{
-                  fontSize: '0.6rem',
+                  fontSize: '0.62rem',
                   letterSpacing: '0.2em',
                   color: '#f3e5ab',
                   textTransform: 'uppercase',
@@ -170,13 +170,14 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
             <h1
               style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(1.6rem, 5.5vw, 2.25rem)',
-                lineHeight: 1.1,
+                fontSize: 'clamp(1.4rem, 4.8vw, 2rem)',
+                lineHeight: 1.15,
                 letterSpacing: '0.18em',
                 fontWeight: 800,
                 color: '#ffffff',
                 textTransform: 'uppercase',
                 margin: 0,
+                textShadow: '0 2px 10px rgba(0, 0, 0, 0.8)',
               }}
             >
               TIWARI OPTICAL
@@ -236,11 +237,11 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
             <p
               style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(0.85rem, 1.5vw, 1.15rem)',
+                fontSize: 'clamp(0.82rem, 1.4vw, 1.1rem)',
                 letterSpacing: 'clamp(0.12em, 0.2vw, 0.22em)',
                 color: '#ffffff',
                 textTransform: 'uppercase',
-                marginBottom: '0.5rem',
+                marginBottom: '0.4rem',
                 fontWeight: 600,
                 textShadow: '0 2px 8px rgba(0,0,0,0.8)',
               }}
@@ -252,11 +253,11 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
             {/* Brand Description */}
             <p
               style={{
-                fontSize: 'clamp(0.78rem, 1vw, 0.88rem)',
+                fontSize: 'clamp(0.76rem, 0.95vw, 0.88rem)',
                 lineHeight: 1.55,
                 color: '#c4c8d8',
                 maxWidth: '460px',
-                marginBottom: '1rem',
+                marginBottom: '0.9rem',
                 fontWeight: 400,
                 textShadow: '0 1px 6px rgba(0,0,0,0.9)',
               }}
@@ -271,9 +272,9 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
                 onClick={scrollToCollection}
                 className="btn-primary hero-btn"
                 style={{
-                  padding: '0.7rem 1.4rem',
+                  padding: '0.65rem 1.25rem',
                   fontSize: '0.72rem',
-                  letterSpacing: '0.15em',
+                  letterSpacing: '0.14em',
                 }}
               >
                 <span>EXPLORE COLLECTION</span>
@@ -283,9 +284,9 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
                 href="#about"
                 className="btn-secondary hero-btn"
                 style={{
-                  padding: '0.65rem 1.25rem',
+                  padding: '0.65rem 1.15rem',
                   fontSize: '0.72rem',
-                  letterSpacing: '0.15em',
+                  letterSpacing: '0.14em',
                 }}
                 onClick={(e) => {
                   e.preventDefault();
@@ -308,7 +309,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           style={{
             position: 'absolute',
             opacity: 0,
-            transform: 'translate3d(0, 16px, 0)',
+            transform: 'translate3d(0, 14px, 0)',
             pointerEvents: 'none',
             transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
             willChange: 'opacity, transform',
@@ -319,18 +320,18 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.45rem',
-              padding: '0.3rem 0.8rem',
+              padding: '0.28rem 0.75rem',
               borderRadius: '9999px',
-              background: 'rgba(10, 12, 18, 0.8)',
-              border: '1px solid rgba(163, 184, 204, 0.3)',
+              background: 'rgba(10, 12, 18, 0.85)',
+              border: '1px solid rgba(163, 184, 204, 0.35)',
               backdropFilter: 'blur(12px)',
-              marginBottom: '0.65rem',
+              marginBottom: '0.5rem',
             }}
           >
             <Eye size={12} color="#a3b8cc" />
             <span
               style={{
-                fontSize: '0.65rem',
+                fontSize: '0.62rem',
                 letterSpacing: '0.2em',
                 color: '#a3b8cc',
                 textTransform: 'uppercase',
@@ -344,12 +345,12 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.5rem, 3.5vw, 2.85rem)',
+              fontSize: 'clamp(1.35rem, 3.2vw, 2.75rem)',
               lineHeight: 1.15,
               letterSpacing: '0.15em',
               fontWeight: 800,
               color: '#ffffff',
-              marginBottom: '0.5rem',
+              marginBottom: '0.45rem',
               textTransform: 'uppercase',
             }}
           >
@@ -359,8 +360,8 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
 
           <p
             style={{
-              fontSize: 'clamp(0.78rem, 1vw, 0.88rem)',
-              lineHeight: 1.65,
+              fontSize: 'clamp(0.76rem, 0.95vw, 0.88rem)',
+              lineHeight: 1.6,
               color: '#b0b5c6',
               fontWeight: 400,
             }}
@@ -371,7 +372,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
 
 
         {/* =========================================================================
-            PHASE 3: ARCHITECTURAL SHOWROOM / 3D EMBLEM
+            PHASE 3: ARCHITECTURAL SHOWROOM / SANCTUARY
            ========================================================================= */}
         <div
           ref={phase3Ref}
@@ -379,7 +380,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           style={{
             position: 'absolute',
             opacity: 0,
-            transform: 'translate3d(0, 16px, 0)',
+            transform: 'translate3d(0, 14px, 0)',
             pointerEvents: 'none',
             transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
             willChange: 'opacity, transform',
@@ -390,18 +391,18 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.45rem',
-              padding: '0.3rem 0.8rem',
+              padding: '0.28rem 0.75rem',
               borderRadius: '9999px',
-              background: 'rgba(10, 12, 18, 0.8)',
+              background: 'rgba(10, 12, 18, 0.85)',
               border: '1px solid rgba(255, 255, 255, 0.2)',
               backdropFilter: 'blur(12px)',
-              marginBottom: '0.65rem',
+              marginBottom: '0.5rem',
             }}
           >
             <Shield size={12} color="#ffffff" />
             <span
               style={{
-                fontSize: '0.65rem',
+                fontSize: '0.62rem',
                 letterSpacing: '0.2em',
                 color: '#ffffff',
                 textTransform: 'uppercase',
@@ -415,12 +416,12 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.5rem, 3.5vw, 2.85rem)',
+              fontSize: 'clamp(1.35rem, 3.2vw, 2.75rem)',
               lineHeight: 1.15,
               letterSpacing: '0.16em',
               fontWeight: 800,
               color: '#ffffff',
-              marginBottom: '0.5rem',
+              marginBottom: '0.45rem',
               textTransform: 'uppercase',
             }}
           >
@@ -430,8 +431,8 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
 
           <p
             style={{
-              fontSize: 'clamp(0.78rem, 1vw, 0.88rem)',
-              lineHeight: 1.65,
+              fontSize: 'clamp(0.76rem, 0.95vw, 0.88rem)',
+              lineHeight: 1.6,
               color: '#b0b5c6',
               maxWidth: '480px',
               margin: '0 auto',
@@ -452,7 +453,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           style={{
             position: 'absolute',
             opacity: 0,
-            transform: 'translate3d(0, 16px, 0)',
+            transform: 'translate3d(0, 14px, 0)',
             pointerEvents: 'none',
             transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
             willChange: 'opacity, transform',
@@ -463,18 +464,18 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.45rem',
-              padding: '0.3rem 0.8rem',
+              padding: '0.28rem 0.75rem',
               borderRadius: '9999px',
-              background: 'rgba(10, 12, 18, 0.8)',
+              background: 'rgba(10, 12, 18, 0.85)',
               border: '1px solid rgba(212, 175, 55, 0.35)',
               backdropFilter: 'blur(12px)',
-              marginBottom: '0.65rem',
+              marginBottom: '0.5rem',
             }}
           >
             <Compass size={12} color="#d4af37" />
             <span
               style={{
-                fontSize: '0.65rem',
+                fontSize: '0.62rem',
                 letterSpacing: '0.2em',
                 color: '#f3e5ab',
                 textTransform: 'uppercase',
@@ -488,12 +489,12 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.5rem, 3.5vw, 3rem)',
+              fontSize: 'clamp(1.35rem, 3.2vw, 2.85rem)',
               lineHeight: 1.15,
               letterSpacing: '0.15em',
               fontWeight: 800,
               color: '#ffffff',
-              marginBottom: '0.4rem',
+              marginBottom: '0.35rem',
               textTransform: 'uppercase',
             }}
           >
@@ -504,10 +505,10 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           <p
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(0.85rem, 1.3vw, 1.05rem)',
+              fontSize: 'clamp(0.82rem, 1.2vw, 1rem)',
               letterSpacing: '0.12em',
               color: '#e2e4ea',
-              marginBottom: '0.5rem',
+              marginBottom: '0.4rem',
               fontWeight: 500,
             }}
           >
@@ -516,11 +517,11 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
 
           <p
             style={{
-              fontSize: 'clamp(0.78rem, 0.95vw, 0.85rem)',
-              lineHeight: 1.6,
+              fontSize: 'clamp(0.76rem, 0.9vw, 0.85rem)',
+              lineHeight: 1.55,
               color: '#9ea3b5',
               maxWidth: '420px',
-              marginBottom: '1rem',
+              marginBottom: '0.85rem',
             }}
           >
             Explore our curated selection of 20 signature sunglasses engineered for everyday confidence and distinguished luxury.
@@ -530,9 +531,9 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
             onClick={scrollToCollection}
             className="btn-primary hero-btn"
             style={{
-              padding: '0.65rem 1.35rem',
+              padding: '0.6rem 1.25rem',
               fontSize: '0.72rem',
-              letterSpacing: '0.15em',
+              letterSpacing: '0.14em',
             }}
           >
             <span>EXPLORE COLLECTION</span>
@@ -542,7 +543,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
 
 
         {/* =========================================================================
-            PHASE 5: HERO PRODUCT & SEAMLESS TRANSITION
+            PHASE 5: HERO PRODUCT & FINAL TRANSITION
            ========================================================================= */}
         <div
           ref={phase5Ref}
@@ -550,7 +551,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           style={{
             position: 'absolute',
             opacity: 0,
-            transform: 'translate3d(0, 16px, 0)',
+            transform: 'translate3d(0, 14px, 0)',
             pointerEvents: 'none',
             transition: 'opacity 0.15s ease-out, transform 0.15s ease-out',
             willChange: 'opacity, transform',
@@ -558,12 +559,12 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
         >
           <span
             style={{
-              fontSize: '0.65rem',
-              letterSpacing: '0.28em',
+              fontSize: '0.62rem',
+              letterSpacing: '0.25em',
               color: '#9ea3b5',
               textTransform: 'uppercase',
               display: 'block',
-              marginBottom: '0.4rem',
+              marginBottom: '0.35rem',
               fontWeight: 500,
             }}
           >
@@ -573,12 +574,12 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           <h2
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(1.6rem, 3.8vw, 3.25rem)',
+              fontSize: 'clamp(1.4rem, 3.5vw, 3rem)',
               lineHeight: 1.12,
               letterSpacing: '0.18em',
               fontWeight: 800,
               color: '#ffffff',
-              marginBottom: '0.4rem',
+              marginBottom: '0.35rem',
               textTransform: 'uppercase',
             }}
           >
@@ -588,11 +589,11 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           <p
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(0.85rem, 1.4vw, 1.1rem)',
-              letterSpacing: '0.22em',
+              fontSize: 'clamp(0.82rem, 1.3vw, 1.05rem)',
+              letterSpacing: '0.2em',
               color: '#f3e5ab',
               textTransform: 'uppercase',
-              marginBottom: '1rem',
+              marginBottom: '0.85rem',
               fontWeight: 600,
             }}
           >
@@ -603,9 +604,9 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
             onClick={scrollToCollection}
             className="btn-primary hero-btn"
             style={{
-              padding: '0.7rem 1.6rem',
+              padding: '0.65rem 1.45rem',
               fontSize: '0.75rem',
-              letterSpacing: '0.16em',
+              letterSpacing: '0.15em',
             }}
           >
             <span>BROWSE ALL 20 FRAMES</span>
@@ -638,7 +639,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           left: clamp(2rem, 5vw, 4.5rem);
           top: 50%;
           transform: translate3d(0, -50%, 0);
-          background: radial-gradient(circle at 20% 50%, rgba(5, 5, 7, 0.85) 0%, rgba(5, 5, 7, 0.5) 60%, transparent 100%);
+          background: radial-gradient(circle at 20% 50%, rgba(5, 5, 7, 0.92) 0%, rgba(5, 5, 7, 0.6) 60%, transparent 100%);
           padding: 1.75rem 2rem;
           border-radius: 20px;
         }
@@ -649,7 +650,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           left: clamp(2rem, 5vw, 4.5rem);
           top: 50%;
           transform: translate3d(0, -50%, 0);
-          background: radial-gradient(circle at 20% 50%, rgba(5, 5, 7, 0.85) 0%, rgba(5, 5, 7, 0.4) 60%, transparent 100%);
+          background: radial-gradient(circle at 20% 50%, rgba(5, 5, 7, 0.92) 0%, rgba(5, 5, 7, 0.5) 60%, transparent 100%);
           padding: 1.75rem 2rem;
           border-radius: 20px;
         }
@@ -660,20 +661,26 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           right: clamp(2rem, 5vw, 4.5rem);
           top: 50%;
           transform: translate3d(0, -50%, 0);
-          background: radial-gradient(circle at 80% 50%, rgba(5, 5, 7, 0.85) 0%, rgba(5, 5, 7, 0.4) 60%, transparent 100%);
+          background: radial-gradient(circle at 80% 50%, rgba(5, 5, 7, 0.92) 0%, rgba(5, 5, 7, 0.5) 60%, transparent 100%);
           padding: 1.75rem 2rem;
           border-radius: 20px;
         }
 
         .phase-center {
-          max-width: 580px;
+          max-width: 600px;
           text-align: center;
+          position: absolute;
           left: 50%;
-          top: 50%;
-          transform: translate3d(-50%, -50%, 0);
-          background: radial-gradient(circle at 50% 50%, rgba(5, 5, 7, 0.88) 0%, rgba(5, 5, 7, 0.4) 70%, transparent 100%);
-          padding: 2rem;
-          border-radius: 24px;
+          bottom: clamp(3rem, 9vh, 6.5rem);
+          top: auto;
+          transform: translate3d(-50%, 0, 0);
+          background: rgba(8, 10, 15, 0.88);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          padding: 1.75rem 2.25rem;
+          border-radius: 22px;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
         }
 
         .hero-cta-group {
@@ -686,9 +693,12 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
         @media (min-width: 769px) and (max-height: 740px) {
           .hero-overlay-card,
           .phase-left,
-          .phase-right,
-          .phase-center {
+          .phase-right {
             padding: 1.25rem 1.5rem !important;
+          }
+          .phase-center {
+            bottom: 2.25rem !important;
+            padding: 1.25rem 1.75rem !important;
           }
         }
 
@@ -696,7 +706,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
            MOBILE COMPOSITION (max-width: 768px)
            - Dedicated Top Header
            - 100% Unobstructed Central 3D Sunglasses Stage
-           - Lower Controls Safe Area
+           - Elevated Lower Cards placed directly below the glasses
            ========================================================================= */
         @media (max-width: 768px) {
           .desktop-hero-header {
@@ -713,7 +723,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
             flex-direction: column;
             align-items: center;
             position: absolute;
-            top: max(80px, 10vh);
+            top: max(68px, 7.5vh);
             left: 0;
             right: 0;
             text-align: center;
@@ -722,7 +732,7 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
             pointer-events: none;
           }
 
-          /* Mobile Bottom Card (Below Sunglasses Stage) */
+          /* Elevated Mobile Cards Positioned Directly Below 3D Sunglasses */
           .hero-overlay-card,
           .phase-left,
           .phase-right,
@@ -730,18 +740,19 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
             position: absolute !important;
             left: 1rem !important;
             right: 1rem !important;
-            bottom: max(1.25rem, 3vh) !important;
+            bottom: clamp(2.5rem, 8vh, 5.5rem) !important;
             top: auto !important;
-            max-width: 100% !important;
+            max-width: min(100% - 2rem, 440px) !important;
+            margin: 0 auto !important;
             transform: none !important;
             text-align: center !important;
-            padding: 1.15rem 1rem !important;
-            background: linear-gradient(to top, rgba(5, 5, 7, 0.98) 0%, rgba(5, 5, 7, 0.88) 75%, rgba(5, 5, 7, 0.6) 100%) !important;
+            padding: 1.1rem 1.25rem !important;
+            background: rgba(8, 10, 15, 0.92) !important;
             border-radius: 18px !important;
-            backdrop-filter: blur(16px) !important;
-            -webkit-backdrop-filter: blur(16px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7) !important;
+            backdrop-filter: blur(24px) !important;
+            -webkit-backdrop-filter: blur(24px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 0, 0, 0.5) !important;
             z-index: 15;
           }
 
@@ -755,10 +766,11 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
 
           .hero-btn {
             flex: 1 !important;
-            padding: 0.65rem 0.75rem !important;
-            font-size: 0.68rem !important;
-            letter-spacing: 0.12em !important;
+            padding: 0.65rem 0.65rem !important;
+            font-size: clamp(0.65rem, 2.2vw, 0.72rem) !important;
+            letter-spacing: 0.1em !important;
             white-space: nowrap !important;
+            min-height: 42px !important;
           }
 
           .hero-overlay-card p,
@@ -770,13 +782,19 @@ const StoryOverlays = forwardRef<StoryOverlaysHandle, {}>((props, ref) => {
           }
         }
 
-        /* Ultra-compact mobile screens (< 380px) */
-        @media (max-width: 380px) {
+        /* Narrow mobile screens (< 360px) */
+        @media (max-width: 360px) {
           .hero-cta-group {
             flex-direction: column !important;
           }
           .hero-btn {
             width: 100% !important;
+          }
+          .hero-overlay-card,
+          .phase-left,
+          .phase-right,
+          .phase-center {
+            bottom: 1.5rem !important;
           }
         }
       `}</style>

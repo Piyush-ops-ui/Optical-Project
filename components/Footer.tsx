@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ArrowUp, Instagram, Facebook, Twitter, Shield, Heart } from 'lucide-react';
+import { ArrowUp, Instagram, Facebook, Twitter } from 'lucide-react';
 import { SITE_CONFIG } from '@/data/products';
 
 export default function Footer() {
@@ -14,7 +14,7 @@ export default function Footer() {
       style={{
         backgroundColor: '#030305',
         borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-        padding: '5rem 0 2.5rem 0',
+        padding: 'clamp(3.5rem, 6vw, 5rem) 0 2.5rem 0',
         position: 'relative',
         zIndex: 20,
       }}
@@ -24,27 +24,28 @@ export default function Footer() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: '3.5rem',
-            marginBottom: '4rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
+            gap: 'clamp(2rem, 4vw, 3.5rem)',
+            marginBottom: 'clamp(2.5rem, 5vw, 4rem)',
           }}
         >
           {/* Brand Col */}
           <div style={{ maxWidth: '360px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.85rem' }}>
               <div
                 style={{
                   width: '32px',
                   height: '32px',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  border: '1px solid rgba(212, 175, 55, 0.4)',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: '#ffffff',
-                  fontSize: '0.7rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.1em',
+                  color: '#f3e5ab',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  background: 'rgba(212, 175, 55, 0.08)',
                 }}
               >
                 TO
@@ -52,9 +53,9 @@ export default function Footer() {
               <span
                 style={{
                   fontFamily: 'var(--font-serif)',
-                  fontSize: '1.2rem',
+                  fontSize: '1.15rem',
                   fontWeight: 700,
-                  letterSpacing: '0.22em',
+                  letterSpacing: '0.2em',
                   color: '#ffffff',
                   textTransform: 'uppercase',
                 }}
@@ -66,11 +67,12 @@ export default function Footer() {
             <p
               style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: '0.85rem',
-                letterSpacing: '0.2em',
+                fontSize: '0.82rem',
+                letterSpacing: '0.18em',
                 color: '#c4c7d5',
                 textTransform: 'uppercase',
-                marginBottom: '1rem',
+                marginBottom: '0.75rem',
+                fontWeight: 600,
               }}
             >
               {SITE_CONFIG.tagline}
@@ -78,20 +80,22 @@ export default function Footer() {
 
             <p
               style={{
-                fontSize: '0.8125rem',
-                lineHeight: 1.7,
+                fontSize: '0.8rem',
+                lineHeight: 1.65,
                 color: '#717585',
-                marginBottom: '1.5rem',
+                marginBottom: '1.25rem',
               }}
             >
               {SITE_CONFIG.description}
             </p>
 
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <span
+            <div style={{ display: 'flex', gap: '0.65rem' }}>
+              <a
+                href="#"
+                aria-label="Instagram"
                 style={{
-                  width: '36px',
-                  height: '36px',
+                  width: '38px',
+                  height: '38px',
                   borderRadius: '50%',
                   backgroundColor: 'rgba(255, 255, 255, 0.04)',
                   border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -99,16 +103,18 @@ export default function Footer() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#9aa0b2',
-                  cursor: 'pointer',
+                  textDecoration: 'none',
                   transition: 'all 0.2s ease',
                 }}
               >
                 <Instagram size={15} />
-              </span>
-              <span
+              </a>
+              <a
+                href="#"
+                aria-label="Facebook"
                 style={{
-                  width: '36px',
-                  height: '36px',
+                  width: '38px',
+                  height: '38px',
                   borderRadius: '50%',
                   backgroundColor: 'rgba(255, 255, 255, 0.04)',
                   border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -116,16 +122,18 @@ export default function Footer() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#9aa0b2',
-                  cursor: 'pointer',
+                  textDecoration: 'none',
                   transition: 'all 0.2s ease',
                 }}
               >
                 <Facebook size={15} />
-              </span>
-              <span
+              </a>
+              <a
+                href="#"
+                aria-label="Twitter"
                 style={{
-                  width: '36px',
-                  height: '36px',
+                  width: '38px',
+                  height: '38px',
                   borderRadius: '50%',
                   backgroundColor: 'rgba(255, 255, 255, 0.04)',
                   border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -133,12 +141,12 @@ export default function Footer() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#9aa0b2',
-                  cursor: 'pointer',
+                  textDecoration: 'none',
                   transition: 'all 0.2s ease',
                 }}
               >
                 <Twitter size={15} />
-              </span>
+              </a>
             </div>
           </div>
 
@@ -147,17 +155,17 @@ export default function Footer() {
             <h4
               style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: '0.875rem',
-                letterSpacing: '0.2em',
+                fontSize: '0.85rem',
+                letterSpacing: '0.18em',
                 textTransform: 'uppercase',
                 color: '#ffffff',
-                marginBottom: '1.5rem',
+                marginBottom: '1.25rem',
                 fontWeight: 600,
               }}
             >
               Navigation
             </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {['Home', 'Collection', 'About', 'Contact'].map((item) => (
                 <li key={item}>
                   <a
@@ -165,7 +173,7 @@ export default function Footer() {
                     style={{
                       color: '#8e92a2',
                       textDecoration: 'none',
-                      fontSize: '0.8125rem',
+                      fontSize: '0.8rem',
                       letterSpacing: '0.08em',
                       transition: 'color 0.2s ease',
                     }}
@@ -188,25 +196,25 @@ export default function Footer() {
             <h4
               style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: '0.875rem',
-                letterSpacing: '0.2em',
+                fontSize: '0.85rem',
+                letterSpacing: '0.18em',
                 textTransform: 'uppercase',
                 color: '#ffffff',
-                marginBottom: '1.5rem',
+                marginBottom: '1.25rem',
                 fontWeight: 600,
               }}
             >
               Silhouettes
             </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-              {['Square & Geometric', 'Classic Aviator', 'Riviera Wayfarer', 'Rimless Titanium', 'Active Performance'].map((item) => (
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {['Square & Geometric', 'Classic Aviator', 'Riviera Wayfarer', 'Rimless Titanium', 'Sport Active'].map((item) => (
                 <li key={item}>
                   <a
                     href="#collection"
                     style={{
                       color: '#8e92a2',
                       textDecoration: 'none',
-                      fontSize: '0.8125rem',
+                      fontSize: '0.8rem',
                       letterSpacing: '0.08em',
                       transition: 'color 0.2s ease',
                     }}
@@ -225,23 +233,23 @@ export default function Footer() {
           </div>
 
           {/* Back to Top & Experience Note */}
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '1.5rem' }}>
             <div>
               <h4
                 style={{
                   fontFamily: 'var(--font-serif)',
-                  fontSize: '0.875rem',
-                  letterSpacing: '0.2em',
+                  fontSize: '0.85rem',
+                  letterSpacing: '0.18em',
                   textTransform: 'uppercase',
                   color: '#ffffff',
-                  marginBottom: '1.5rem',
+                  marginBottom: '1.25rem',
                   fontWeight: 600,
                 }}
               >
                 Experience
               </h4>
-              <p style={{ fontSize: '0.8rem', color: '#717585', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                Controlled 3D frame progression powered by GSAP Canvas rendering.
+              <p style={{ fontSize: '0.78rem', color: '#717585', lineHeight: 1.6 }}>
+                3D frame progression powered by GSAP Canvas rendering.
               </p>
             </div>
 
@@ -250,13 +258,13 @@ export default function Footer() {
               className="btn-secondary"
               style={{
                 alignSelf: 'flex-start',
-                padding: '0.6rem 1.25rem',
-                fontSize: '0.75rem',
-                letterSpacing: '0.15em',
+                padding: '0.55rem 1.15rem',
+                fontSize: '0.72rem',
+                letterSpacing: '0.14em',
               }}
             >
               <span>BACK TO TOP</span>
-              <ArrowUp size={14} />
+              <ArrowUp size={13} />
             </button>
           </div>
         </div>
@@ -264,26 +272,27 @@ export default function Footer() {
         {/* Bottom copyright & disclaimer */}
         <div
           style={{
-            paddingTop: '2rem',
+            paddingTop: '1.75rem',
             borderTop: '1px solid rgba(255, 255, 255, 0.05)',
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '1rem',
-            fontSize: '0.75rem',
+            fontSize: '0.72rem',
             color: '#5b6070',
           }}
         >
           <p>
-            © {new Date().getFullYear()} TIWARI OPTICAL. All rights reserved. Version 1.0 (Frontend Showcase).
+            © {new Date().getFullYear()} TIWARI OPTICAL. All rights reserved.
           </p>
 
           <p style={{ fontSize: '0.7rem' }}>
-            Curated Demo Sunglasses Collection • WhatsApp checkout in Phase 2
+            Curated Eyewear Showcase • New Delhi
           </p>
         </div>
       </div>
     </footer>
   );
 }
+
