@@ -8,18 +8,40 @@ interface LoadingScreenProps {
 }
 
 export default function LoadingScreen({ progress, isLoaded }: LoadingScreenProps) {
+  const [displayProgress, setDisplayProgress] = useState<number>(0);
   const [shouldRender, setShouldRender] = useState<boolean>(true);
 
+  // Smoothly increment progress
   useEffect(() => {
-    if (isLoaded) {
+    const target = isLoaded ? 100 : Math.max(progress, 15);
+
+    const interval = setInterval(() => {
+      setDisplayProgress((prev) => {
+        if (prev >= target) {
+          if (isLoaded) return 100;
+          return prev;
+        }
+        const step = Math.max(1, Math.ceil((target - prev) / 4));
+        return Math.min(target, prev + step);
+      });
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [progress, isLoaded]);
+
+  // Dismiss after load completes
+  useEffect(() => {
+    if (isLoaded && displayProgress >= 95) {
       const timer = setTimeout(() => {
         setShouldRender(false);
-      }, 700);
+      }, 600);
       return () => clearTimeout(timer);
     }
-  }, [isLoaded]);
+  }, [isLoaded, displayProgress]);
 
   if (!shouldRender) return null;
+
+  const currentPercent = isLoaded ? 100 : displayProgress;
 
   return (
     <div
@@ -34,9 +56,9 @@ export default function LoadingScreen({ progress, isLoaded }: LoadingScreenProps
         justifyContent: 'center',
         padding: '2rem',
         transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s',
-        opacity: isLoaded ? 0 : 1,
-        pointerEvents: isLoaded ? 'none' : 'auto',
-        visibility: isLoaded ? 'hidden' : 'visible',
+        opacity: isLoaded && displayProgress >= 95 ? 0 : 1,
+        pointerEvents: isLoaded && displayProgress >= 95 ? 'none' : 'auto',
+        visibility: isLoaded && displayProgress >= 95 ? 'hidden' : 'visible',
       }}
     >
       {/* Background ambient lighting */}
@@ -45,29 +67,30 @@ export default function LoadingScreen({ progress, isLoaded }: LoadingScreenProps
           position: 'absolute',
           width: '500px',
           height: '500px',
-          background: 'radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0) 70%)',
+          background: 'radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, rgba(0, 0, 0, 0) 70%)',
           borderRadius: '50%',
           pointerEvents: 'none',
         }}
       />
 
       <div style={{ textAlign: 'center', position: 'relative', zIndex: 10, maxWidth: '480px', width: '100%' }}>
-        {/* Brand Monogram / Icon */}
+        {/* Brand Monogram */}
         <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
           <div
             style={{
-              width: '44px',
-              height: '44px',
-              border: '1px solid rgba(255, 255, 255, 0.25)',
+              width: '46px',
+              height: '46px',
+              border: '1px solid rgba(212, 175, 55, 0.35)',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#ffffff',
+              color: '#f3e5ab',
               fontSize: '0.85rem',
               letterSpacing: '0.15em',
-              fontWeight: 600,
-              boxShadow: '0 0 25px rgba(255, 255, 255, 0.1)',
+              fontWeight: 700,
+              boxShadow: '0 0 25px rgba(212, 175, 55, 0.15)',
+              background: 'rgba(212, 175, 55, 0.05)',
             }}
           >
             TO
@@ -121,10 +144,10 @@ export default function LoadingScreen({ progress, isLoaded }: LoadingScreenProps
               top: 0,
               left: 0,
               bottom: 0,
-              width: `${Math.max(progress, isLoaded ? 100 : 0)}%`,
-              background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, #ffffff 100%)',
-              boxShadow: '0 0 15px rgba(255, 255, 255, 0.8)',
-              transition: 'width 0.25s ease-out',
+              width: `${currentPercent}%`,
+              background: 'linear-gradient(90deg, #d4af37 0%, #ffffff 100%)',
+              boxShadow: '0 0 15px rgba(212, 175, 55, 0.8)',
+              transition: 'width 0.15s ease-out',
             }}
           />
         </div>
@@ -142,9 +165,10 @@ export default function LoadingScreen({ progress, isLoaded }: LoadingScreenProps
           }}
         >
           <span>Curating Experience</span>
-          <span style={{ color: '#ffffff', fontWeight: 600 }}>{Math.max(progress, isLoaded ? 100 : 0)}%</span>
+          <span style={{ color: '#ffffff', fontWeight: 600 }}>{currentPercent}%</span>
         </div>
       </div>
     </div>
   );
 }
+

@@ -24,249 +24,211 @@ export default function ScrollCanvasEngine({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlaysRef = useRef<StoryOverlaysHandle>(null);
 
-  // Dedicated in-memory cache for all 75 frames
+  // In-memory cache for all 75 frames
   const framesCacheRef = useRef<(HTMLImageElement | null)[]>(new Array(totalFrames).fill(null));
-  const frameLoadedSetRef = useRef<Set<number>>(new Set());
 
-  // Animation and rendering state refs (zero React re-renders on scroll)
+  // State refs for animation
   const targetFrameIndexRef = useRef<number>(0);
   const renderedFrameIndexRef = useRef<number>(-1);
-  const lastSuccessfullyDrawnImgRef = useRef<HTMLImageElement | null>(null);
   const isRenderingRef = useRef<boolean>(false);
   const rafIdRef = useRef<number | null>(null);
 
-  // React state for initial canvas mount
   const [isCanvasReady, setIsCanvasReady] = useState<boolean>(false);
 
-  // Format frame URL
-  const getFrameUrl = useCallback((index: number) => {
-    const frameNum = String(index + 1).padStart(3, '0');
-    return `${framePrefix}${frameNum}.jpg`;
-  }, [framePrefix]);
+  // Frame URL helper
+  const getFrameUrl = useCallback(
+    (index: number) => {
+      const frameNum = String(index + 1).padStart(3, '0');
+      return `${framePrefix}${frameNum}.jpg`;
+    },
+    [framePrefix]
+  );
 
-  // Helper to check if an image is completely loaded and ready to draw
+  // Check if image is ready to draw
   const isImageReady = useCallback((img: HTMLImageElement | null | undefined): img is HTMLImageElement => {
     return !!img && img.complete && img.naturalWidth > 0 && img.naturalHeight > 0;
   }, []);
 
-  // Persistent Canvas Draw Function — NEVER clears canvas unless immediately drawing over it
-  const drawImageToCanvas = useCallback((img: HTMLImageElement, frameIndex: number) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: false });
-    if (!ctx) return;
+  // Find exact frame or the nearest loaded frame
+  const getBestAvailableImage = useCallback(
+    (targetIndex: number): { img: HTMLImageElement; index: number } | null => {
+      // 1. Exact match
+      const exact = framesCacheRef.current[targetIndex];
+      if (isImageReady(exact)) return { img: exact, index: targetIndex };
 
-    const dpr = Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 2);
-    const rect = canvas.getBoundingClientRect();
-    const targetW = Math.round(rect.width * dpr);
-    const targetH = Math.round(rect.height * dpr);
-
-    if (canvas.width !== targetW || canvas.height !== targetH) {
-      canvas.width = targetW;
-      canvas.height = targetH;
-    }
-
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
-    const imgWidth = img.naturalWidth;
-    const imgHeight = img.naturalHeight;
-
-    if (!imgWidth || !imgHeight) return;
-
-    const imgAspect = imgWidth / imgHeight;
-    const canvasAspect = canvasWidth / canvasHeight;
-
-    let drawWidth: number;
-    let drawHeight: number;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    // Detect mobile viewport (width <= 768px or portrait aspect ratio)
-    const isMobile = rect.width <= 768 || canvasAspect < 1.1;
-
-    if (isMobile) {
-      // Mobile Subject-Safe Framing:
-      // Scale so the core 3D subject fills the width with safe margins, avoiding both tiny letterboxing and aggressive cropping
-      const mobileScale = Math.min(1.35, Math.max(1.15, canvasHeight / (canvasWidth * 1.5)));
-      drawWidth = canvasWidth * mobileScale;
-      drawHeight = drawWidth / imgAspect;
-      offsetX = (canvasWidth - drawWidth) / 2;
-
-      // Position in the vertical safe zone between top navbar (80px) and bottom story card (~200px)
-      const topSafeMargin = 80 * dpr;
-      const bottomSafeMargin = 210 * dpr;
-      const availableHeight = canvasHeight - topSafeMargin - bottomSafeMargin;
-      offsetY = topSafeMargin + (availableHeight - drawHeight) / 2;
-
-      // Ensure it never goes above top navbar
-      if (offsetY < 65 * dpr) {
-        offsetY = 65 * dpr;
+      // 2. Search outwards for closest loaded frame
+      for (let offset = 1; offset < totalFrames; offset++) {
+        const prev = targetIndex - offset;
+        if (prev >= 0) {
+          const imgPrev = framesCacheRef.current[prev];
+          if (isImageReady(imgPrev)) return { img: imgPrev, index: prev };
+        }
+        const next = targetIndex + offset;
+        if (next < totalFrames) {
+          const imgNext = framesCacheRef.current[next];
+          if (isImageReady(imgNext)) return { img: imgNext, index: next };
+        }
       }
-    } else {
-      // Desktop / Landscape: Wide cinematic cover math
+
+      return null;
+    },
+    [isImageReady, totalFrames]
+  );
+
+  // Draw image to canvas with responsive framing
+  const drawImageToCanvas = useCallback(
+    (img: HTMLImageElement, frameIndex: number) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d', { alpha: false });
+      if (!ctx) return;
+
+      const dpr = Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      const targetW = Math.round((rect.width > 0 ? rect.width : window.innerWidth) * dpr);
+      const targetH = Math.round((rect.height > 0 ? rect.height : window.innerHeight) * dpr);
+
+      if (targetW <= 0 || targetH <= 0) return;
+
+      if (canvas.width !== targetW || canvas.height !== targetH) {
+        canvas.width = targetW;
+        canvas.height = targetH;
+      }
+
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+      const imgWidth = img.naturalWidth || 1920;
+      const imgHeight = img.naturalHeight || 1080;
+
+      const imgAspect = imgWidth / imgHeight;
+      const canvasAspect = canvasWidth / canvasHeight;
+
+      // True Aspect-Ratio Preserving Cover Mode (100% proportional, zero stretching/distortion)
+      let drawWidth: number;
+      let drawHeight: number;
+      let offsetX = 0;
+      let offsetY = 0;
+
       if (canvasAspect > imgAspect) {
+        // Viewport is wider than 16:9 -> Fit width, center-crop vertical overflow
         drawWidth = canvasWidth;
         drawHeight = canvasWidth / imgAspect;
+        offsetX = 0;
         offsetY = (canvasHeight - drawHeight) / 2;
       } else {
+        // Viewport is taller than 16:9 (e.g. mobile portrait) -> Fit height, center-crop horizontal overflow
         drawWidth = canvasHeight * imgAspect;
         drawHeight = canvasHeight;
         offsetX = (canvasWidth - drawWidth) / 2;
+        offsetY = 0;
       }
-    }
 
-    // Fill background with seamless obsidian dark
-    ctx.fillStyle = '#050507';
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      // Fill background and draw proportional cover frame
+      ctx.fillStyle = '#050507';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
 
-    // Draw directly over the canvas without clearing first (no blank flicker)
-    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-    
-    renderedFrameIndexRef.current = frameIndex;
-    lastSuccessfullyDrawnImgRef.current = img;
-  }, []);
+      renderedFrameIndexRef.current = frameIndex;
+    },
+    []
+  );
 
-  // Request to draw target frame on RAF
-  const requestFrameRender = useCallback((targetIndex: number, progress: number) => {
-    targetFrameIndexRef.current = targetIndex;
+  // Render current target frame on RAF
+  const renderCurrentTarget = useCallback(() => {
+    if (isRenderingRef.current) return;
+    isRenderingRef.current = true;
 
-    // Directly update StoryOverlays DOM without triggering React re-renders
-    if (overlaysRef.current) {
-      overlaysRef.current.updateProgress(progress);
-    }
+    rafIdRef.current = requestAnimationFrame(() => {
+      const target = targetFrameIndexRef.current;
+      const best = getBestAvailableImage(target);
 
-    if (!isRenderingRef.current) {
-      isRenderingRef.current = true;
-      rafIdRef.current = requestAnimationFrame(() => {
-        const target = targetFrameIndexRef.current;
-        const candidateImg = framesCacheRef.current[target];
+      if (best && renderedFrameIndexRef.current !== best.index) {
+        drawImageToCanvas(best.img, best.index);
+      }
 
-        // 1. If target frame is 100% ready, render it immediately
-        if (isImageReady(candidateImg)) {
-          if (renderedFrameIndexRef.current !== target) {
-            drawImageToCanvas(candidateImg, target);
-          }
-        }
-        // 2. If target frame is NOT ready, DO NOTHING to canvas.
-        // The last successfully drawn frame remains visible without flicker.
+      isRenderingRef.current = false;
+    });
+  }, [drawImageToCanvas, getBestAvailableImage]);
 
-        isRenderingRef.current = false;
-      });
-    }
-  }, [drawImageToCanvas, isImageReady]);
+  // Stable refs for callbacks to prevent useEffect cancellation
+  const onLoadingProgressRef = useRef(onLoadingProgress);
+  const onLoadingCompleteRef = useRef(onLoadingComplete);
+  useEffect(() => {
+    onLoadingProgressRef.current = onLoadingProgress;
+    onLoadingCompleteRef.current = onLoadingComplete;
+  }, [onLoadingProgress, onLoadingComplete]);
 
-  // Progressive Preloader with strict race condition prevention
+  // Preload all 75 frames concurrently once on mount
   useEffect(() => {
     let isCancelled = false;
     let totalLoaded = 0;
 
-    const loadFrame = (index: number): Promise<HTMLImageElement | null> => {
-      return new Promise((resolve) => {
-        if (framesCacheRef.current[index] && isImageReady(framesCacheRef.current[index])) {
-          resolve(framesCacheRef.current[index]);
-          return;
-        }
-
-        const img = new Image();
-        img.src = getFrameUrl(index);
-
-        img.onload = () => {
-          if (isCancelled) return;
-          framesCacheRef.current[index] = img;
-          frameLoadedSetRef.current.add(index);
-          totalLoaded++;
-
-          // Asynchronously decode off-thread
-          if (typeof img.decode === 'function') {
-            img.decode().catch(() => {});
-          }
-
-          // If this newly loaded frame is the current target frame, render it immediately on RAF
-          if (targetFrameIndexRef.current === index) {
-            requestAnimationFrame(() => {
-              if (targetFrameIndexRef.current === index) {
-                drawImageToCanvas(img, index);
-              }
-            });
-          }
-
-          const pct = Math.min(100, Math.round((totalLoaded / totalFrames) * 100));
-          onLoadingProgress?.(pct);
-          if (totalLoaded >= totalFrames) {
-            onLoadingComplete?.();
-          }
-
-          resolve(img);
-        };
-
-        img.onerror = () => {
-          totalLoaded++;
-          resolve(null);
-        };
-      });
-    };
-
-    // 1. Load initial frame 0 immediately and draw it
-    loadFrame(0).then((img0) => {
-      if (isCancelled || !img0) return;
+    // Load initial frame 0 immediately
+    const img0 = new Image();
+    img0.src = getFrameUrl(0);
+    img0.onload = () => {
+      if (isCancelled) return;
+      framesCacheRef.current[0] = img0;
+      totalLoaded++;
       setIsCanvasReady(true);
       drawImageToCanvas(img0, 0);
-      onLoadingProgress?.(30);
 
-      // 2. Preload keyframes 1 to 20 immediately
-      const preloadInitialBatch = async () => {
-        const batch = [];
-        for (let i = 1; i < Math.min(25, totalFrames); i++) {
-          batch.push(loadFrame(i));
-        }
-        await Promise.all(batch);
+      // Extra paint passes for smooth layout sync
+      requestAnimationFrame(() => {
+        if (!isCancelled) drawImageToCanvas(img0, 0);
+      });
+      setTimeout(() => {
+        if (!isCancelled) drawImageToCanvas(img0, 0);
+      }, 80);
 
-        onLoadingProgress?.(60);
+      onLoadingProgressRef.current?.(35);
+    };
 
-        // 3. Preload all remaining frames progressively
-        for (let i = 25; i < totalFrames; i += 10) {
-          if (isCancelled) break;
-          const chunk = [];
-          for (let j = i; j < Math.min(i + 10, totalFrames); j++) {
-            chunk.push(loadFrame(j));
-          }
-          await Promise.all(chunk);
-          await new Promise((r) => setTimeout(r, 15));
+    // Concurrently preload all remaining frames
+    for (let i = 1; i < totalFrames; i++) {
+      const img = new Image();
+      img.src = getFrameUrl(i);
+      img.onload = () => {
+        if (isCancelled) return;
+        framesCacheRef.current[i] = img;
+        totalLoaded++;
+
+        const pct = Math.min(100, Math.round((totalLoaded / totalFrames) * 100));
+        onLoadingProgressRef.current?.(pct);
+
+        // If newly loaded frame is near our target, render it
+        if (Math.abs(targetFrameIndexRef.current - i) <= 1) {
+          renderCurrentTarget();
         }
 
         if (totalLoaded >= totalFrames) {
-          onLoadingComplete?.();
+          onLoadingCompleteRef.current?.();
         }
       };
 
-      preloadInitialBatch();
-    });
+      img.onerror = () => {
+        totalLoaded++;
+        if (totalLoaded >= totalFrames) {
+          onLoadingCompleteRef.current?.();
+        }
+      };
+    }
 
     return () => {
       isCancelled = true;
     };
-  }, [drawImageToCanvas, getFrameUrl, isImageReady, onLoadingComplete, onLoadingProgress, totalFrames]);
+  }, [drawImageToCanvas, getFrameUrl, renderCurrentTarget, totalFrames]);
 
-  // Setup GSAP ScrollTrigger
+  // GSAP ScrollTrigger Setup
   useEffect(() => {
     if (!containerRef.current || !canvasRef.current) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      if (framesCacheRef.current[0] && isImageReady(framesCacheRef.current[0])) {
-        drawImageToCanvas(framesCacheRef.current[0], 0);
-      }
-      return;
-    }
-
     const container = containerRef.current;
 
-    // Ensure ScrollTrigger ignores mobile address-bar resize jitters
     ScrollTrigger.config({ ignoreMobileResize: true });
 
     const isMobileViewport = window.innerWidth <= 768;
-    // Optimal scroll distance for natural touch swipes on mobile (3200px) vs desktop (4000px)
-    const scrollDistance = isMobileViewport ? '+=3200' : '+=4000';
+    const scrollDistance = isMobileViewport ? '+=2800' : '+=3800';
 
     const trigger = ScrollTrigger.create({
       trigger: container,
@@ -275,35 +237,45 @@ export default function ScrollCanvasEngine({
       pin: true,
       pinSpacing: true,
       anticipatePin: 1,
-      scrub: 0.2, // Snappy 60fps tracking
+      scrub: 0.3, // Continuous smooth tracking
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         const p = self.progress;
-        const targetIndex = Math.min(totalFrames - 1, Math.max(0, Math.floor(p * totalFrames)));
-        requestFrameRender(targetIndex, p);
+        const targetIndex = Math.min(totalFrames - 1, Math.max(0, Math.round(p * (totalFrames - 1))));
+        targetFrameIndexRef.current = targetIndex;
+
+        // Update story text overlays directly
+        if (overlaysRef.current) {
+          overlaysRef.current.updateProgress(p);
+        }
+
+        renderCurrentTarget();
       },
     });
 
-    // Refresh ScrollTrigger to calculate accurate pinned boundaries
     ScrollTrigger.refresh();
 
-    // Resize Handler: Redraws the last successfully rendered image cleanly and refreshes trigger
+    // Resize handler
+    let resizeTimer: NodeJS.Timeout | null = null;
     const handleResize = () => {
-      ScrollTrigger.refresh();
-      if (lastSuccessfullyDrawnImgRef.current && isImageReady(lastSuccessfullyDrawnImgRef.current)) {
-        drawImageToCanvas(lastSuccessfullyDrawnImgRef.current, renderedFrameIndexRef.current);
-      }
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+        renderCurrentTarget();
+      }, 100);
     };
+
     window.addEventListener('resize', handleResize, { passive: true });
 
     return () => {
       trigger.kill();
+      if (resizeTimer) clearTimeout(resizeTimer);
       window.removeEventListener('resize', handleResize);
       if (rafIdRef.current) {
         cancelAnimationFrame(rafIdRef.current);
       }
     };
-  }, [drawImageToCanvas, isImageReady, requestFrameRender, totalFrames]);
+  }, [renderCurrentTarget, totalFrames]);
 
   return (
     <section
@@ -313,6 +285,7 @@ export default function ScrollCanvasEngine({
         position: 'relative',
         width: '100%',
         height: '100vh',
+        minHeight: '100dvh',
         backgroundColor: '#050507',
         overflow: 'hidden',
       }}
@@ -349,7 +322,7 @@ export default function ScrollCanvasEngine({
           top: 0,
           left: 0,
           right: 0,
-          height: '100px',
+          height: '90px',
           background: 'linear-gradient(to bottom, #050507 0%, transparent 100%)',
           zIndex: 2,
           pointerEvents: 'none',
@@ -361,7 +334,7 @@ export default function ScrollCanvasEngine({
           bottom: 0,
           left: 0,
           right: 0,
-          height: '120px',
+          height: '110px',
           background: 'linear-gradient(to top, #050507 0%, transparent 100%)',
           zIndex: 2,
           pointerEvents: 'none',
@@ -447,3 +420,4 @@ export default function ScrollCanvasEngine({
     </section>
   );
 }
+
