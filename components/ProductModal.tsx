@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Product } from '@/types';
 import { X, ShieldCheck, Sparkle, MessageCircle, CheckCircle2 } from 'lucide-react';
+import { getWhatsAppOrderUrl } from '@/config/whatsapp';
 
 interface ProductModalProps {
   product: Product | null;
@@ -33,11 +34,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
   if (!product) return null;
 
   const handleWhatsAppClick = () => {
-    // Generate prefilled WhatsApp message
-    const message = encodeURIComponent(
-      `Hello Tiwari Optical! I am interested in ordering "${product.name}" (${product.brand}, ₹${product.price}). Please share availability and delivery details.`
-    );
-    const whatsappUrl = `https://wa.me/919876543210?text=${message}`;
+    const whatsappUrl = getWhatsAppOrderUrl(product);
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   };
 

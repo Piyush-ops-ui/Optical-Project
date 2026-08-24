@@ -1,4 +1,5 @@
 import { Product } from '@/types';
+import { WHATSAPP_NUMBER } from '@/config/whatsapp';
 
 export const DEMO_PRODUCTS: Product[] = [
   {
@@ -473,10 +474,10 @@ export const SITE_CONFIG = {
   ogImage: '/frames/ezgif-frame-075.jpg',
   storeInfo: {
     address: 'Shop No. 12, Heritage Eyewear Arcade, Luxury High Street, New Delhi - 110001 (Placeholder)',
-    phone: '+91 98765 43210 (Demo Contact)',
-    email: 'concierge@tiwarioptical.com (Demo)',
+    phone: '+91 87889 83420',
+    email: 'concierge@tiwarioptical.com',
     hours: 'Monday – Sunday: 10:30 AM – 09:30 PM',
-    whatsapp: '+91 98765 43210',
+    whatsapp: `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(2, 7)} ${WHATSAPP_NUMBER.slice(7)}`,
     googleMapsUrl: 'https://maps.google.com'
   }
 };

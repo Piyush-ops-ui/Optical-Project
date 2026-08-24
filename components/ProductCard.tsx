@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { Product } from '@/types';
-import { Eye, ArrowUpRight } from 'lucide-react';
+import { Eye, ArrowUpRight, MessageCircle } from 'lucide-react';
+import { getWhatsAppOrderUrl } from '@/config/whatsapp';
 
 interface ProductCardProps {
   product: Product;
@@ -10,6 +11,12 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onSelect }: ProductCardProps) {
+  const handleWhatsAppOrder = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const url = getWhatsAppOrderUrl(product);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div
       onClick={() => onSelect(product)}
@@ -248,68 +255,101 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
         </div>
 
         {/* Price & Action Row */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingTop: '0.85rem',
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-          }}
-        >
-          <div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.45rem' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: '1.15rem',
-                  fontWeight: 700,
-                  color: '#ffffff',
-                }}
-              >
-                ₹{product.price.toLocaleString('en-IN')}
-              </span>
-              {product.originalPrice && (
-                <span
-                  style={{
-                    fontSize: '0.8rem',
-                    color: '#656a7a',
-                    textDecoration: 'line-through',
-                  }}
-                >
-                  ₹{product.originalPrice.toLocaleString('en-IN')}
-                </span>
-              )}
-            </div>
-            <span
-              style={{
-                fontSize: '0.62rem',
-                letterSpacing: '0.08em',
-                color: '#a3b8cc',
-                display: 'block',
-              }}
-            >
-              Includes bespoke case & cloth
-            </span>
-          </div>
-
+        <div>
           <div
             style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              color: '#ffffff',
-              transition: 'all 0.3s ease',
-              flexShrink: 0,
+              justifyContent: 'space-between',
+              paddingTop: '0.85rem',
+              borderTop: '1px solid rgba(255, 255, 255, 0.06)',
             }}
-            className="arrow-circle"
           >
-            <ArrowUpRight size={15} />
+            <div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.45rem' }}>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '1.15rem',
+                    fontWeight: 700,
+                    color: '#ffffff',
+                  }}
+                >
+                  ₹{product.price.toLocaleString('en-IN')}
+                </span>
+                {product.originalPrice && (
+                  <span
+                    style={{
+                      fontSize: '0.8rem',
+                      color: '#656a7a',
+                      textDecoration: 'line-through',
+                    }}
+                  >
+                    ₹{product.originalPrice.toLocaleString('en-IN')}
+                  </span>
+                )}
+              </div>
+              <span
+                style={{
+                  fontSize: '0.62rem',
+                  letterSpacing: '0.08em',
+                  color: '#a3b8cc',
+                  display: 'block',
+                }}
+              >
+                Includes bespoke case & cloth
+              </span>
+            </div>
+
+            <div
+              style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#ffffff',
+                transition: 'all 0.3s ease',
+                flexShrink: 0,
+              }}
+              className="arrow-circle"
+              title="View full specs"
+            >
+              <ArrowUpRight size={15} />
+            </div>
+          </div>
+
+          {/* Dedicated ORDER ON WHATSAPP Button */}
+          <div style={{ marginTop: '0.85rem' }}>
+            <button
+              type="button"
+              onClick={handleWhatsAppOrder}
+              className="whatsapp-card-btn"
+              style={{
+                width: '100%',
+                padding: '0.65rem 1rem',
+                borderRadius: '10px',
+                backgroundColor: 'rgba(37, 211, 102, 0.12)',
+                border: '1px solid rgba(37, 211, 102, 0.35)',
+                color: '#25D366',
+                fontSize: '0.72rem',
+                fontWeight: 600,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.45rem',
+                cursor: 'pointer',
+                transition: 'all 0.25s ease',
+              }}
+            >
+              <MessageCircle size={14} />
+              <span>ORDER ON WHATSAPP</span>
+            </button>
           </div>
         </div>
       </div>
@@ -334,6 +374,13 @@ export default function ProductCard({ product, onSelect }: ProductCardProps) {
           background-color: #ffffff;
           color: #000000;
           transform: rotate(45deg);
+        }
+        .whatsapp-card-btn:hover {
+          background-color: #25D366 !important;
+          color: #ffffff !important;
+          border-color: #25D366 !important;
+          box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35);
+          transform: translateY(-1px);
         }
       `}</style>
     </div>
